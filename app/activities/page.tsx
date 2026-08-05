@@ -40,10 +40,6 @@ const EMPTY_NEW_ACTIVITY = {
 export default function ActivitiesPage() {
   const [scope, setScope] = useState<"internal" | "external">("internal");
   const [ageFilter, setAgeFilter] = useState<string | null>(null);
-  const [selectedActivity, setSelectedActivity] = useState<string | null>(null);
-  const [registered, setRegistered] = useState(false);
-  const [participants, setParticipants] = useState(1);
-  const [names, setNames] = useState("");
   const [deletedIds, setDeletedIds] = useState<string[]>([]);
   const [customActivities, setCustomActivities] = useState<ClubEvent[]>([]);
   const { isCommittee: isAdmin } = useIsCommittee();
@@ -75,22 +71,6 @@ export default function ActivitiesPage() {
       return (event.ageMinYears ?? 0) <= range.min && (range.max === null || (event.ageMaxYears ?? 100) >= range.max);
     })
     .map((event) => applyOverride(event));
-
-  const currentActivity = activities.find((a) => a.id === selectedActivity);
-
-  const handleRegister = () => {
-    if (!names.trim()) {
-      alert("אנא הזן את שמות המשתתפים");
-      return;
-    }
-    setRegistered(true);
-    setTimeout(() => {
-      setSelectedActivity(null);
-      setParticipants(1);
-      setNames("");
-      setRegistered(false);
-    }, 2000);
-  };
 
   const handleCreateExternalActivity = () => {
     if (!newActivity.title.trim() || !newActivity.eventDateStr) {
@@ -288,175 +268,22 @@ export default function ActivitiesPage() {
                   </Card>
                 </Link>
                 {!event.isExternal && (
-                  <button
-                    onClick={() => setSelectedActivity(event.id)}
-                    disabled={registrationClosed}
-                    className="w-full bg-primary text-white py-2 rounded-lg font-semibold hover:bg-primary/90 active:scale-[0.99] transition-colors disabled:bg-surface-2 disabled:text-muted-foreground disabled:cursor-not-allowed"
-                  >
-                    {registrationClosed ? "ההרשמה נסגרה" : "להירשם"}
-                  </button>
+                  registrationClosed ? (
+                    <button disabled className="w-full bg-surface-2 text-muted-foreground py-2 rounded-lg font-semibold cursor-not-allowed">
+                      ההרשמה נסגרה
+                    </button>
+                  ) : (
+                    <Link
+                      href={`/activities/${event.id}`}
+                      className="block w-full text-center bg-primary text-white py-2 rounded-lg font-semibold hover:bg-primary/90 active:scale-[0.99] transition-colors"
+                    >
+                      להירשם
+                    </Link>
+                  )
                 )}
               </div>
             );
           })}
-        </div>
-      )}
-
-      {/* Registration Modal */}
-      {selectedActivity && currentActivity && (
-        <div className="fixed inset-0 bg-black/50 flex items-end z-50">
-          <div className="w-full bg-surface rounded-t-3xl p-6 space-y-4 animate-slide-up">
-            {/* Close Button */}
-            <div className="flex justify-between items-center mb-4">
-              <h2 className="font-sans text-xl font-bold">הרשמה ל{currentActivity.title}</h2>
-              <button
-                onClick={() => setSelectedActivity(null)}
-                className="p-2 hover:bg-surface-2 rounded-lg transition-colors"
-              >
-                <X className="w-5 h-5" />
-              </button>
-            </div>
-
-            {/* Registration Info */}
-            {!registered ? (
-              <div className="space-y-4">
-                {currentActivity.price === "כניסה חופשית" ? (
-                  <>
-                    <div className="bg-green-100/50 dark:bg-green-900/30 rounded-2xl p-4 space-y-2">
-                      <p className="font-semibold text-sm">✓ חינם</p>
-                      <p className="text-sm text-green-700 dark:text-green-300">
-                        {currentActivity.price}
-                      </p>
-                    </div>
-
-                    <div className="bg-primary/10 rounded-2xl p-4 space-y-2">
-                      <p className="font-semibold text-sm">📍 מקום</p>
-                      <p className="text-sm">{currentActivity.location}</p>
-                    </div>
-
-                    {/* Participants */}
-                    <div className="space-y-3 bg-surface-2 rounded-2xl p-4">
-                      <div>
-                        <label className="block text-sm font-semibold mb-2">👥 כמה משתתפים?</label>
-                        <select
-                          value={participants}
-                          onChange={(e) => setParticipants(parseInt(e.target.value))}
-                          className="w-full px-3 py-2 rounded-lg border border-[var(--color-border)] bg-background text-sm"
-                        >
-                          {[1, 2, 3, 4, 5, 6].map((n) => (
-                            <option key={n} value={n}>{n} {n === 1 ? "אדם" : "אנשים"}</option>
-                          ))}
-                        </select>
-                      </div>
-
-                      <div>
-                        <label className="block text-sm font-semibold mb-2">📝 שמות המשתתפים</label>
-                        <textarea
-                          value={names}
-                          onChange={(e) => setNames(e.target.value)}
-                          placeholder="שם אחד בכל שורה&#10;למשל:&#10;רונית כהן&#10;דני כהן"
-                          rows={3}
-                          className="w-full px-3 py-2 rounded-lg border border-[var(--color-border)] bg-background text-sm resize-none"
-                        />
-                      </div>
-                    </div>
-
-                    <button
-                      onClick={handleRegister}
-                      className="w-full bg-primary text-white py-3 rounded-lg font-semibold hover:bg-primary/90 active:scale-[0.99] transition-colors"
-                    >
-                      להירשם
-                    </button>
-                  </>
-                ) : (
-                  <>
-                    {currentActivity.eventDate && (
-                      <div className="bg-surface-2 rounded-2xl p-4 space-y-2">
-                        <p className="font-semibold text-sm">📅 תאריך</p>
-                        <p className="text-sm">
-                          {new Date(currentActivity.eventDate).toLocaleDateString("he-IL", {
-                            weekday: "long",
-                            year: "numeric",
-                            month: "long",
-                            day: "numeric",
-                            hour: "2-digit",
-                            minute: "2-digit",
-                          })}
-                        </p>
-                      </div>
-                    )}
-
-                    <div className="bg-surface-2 rounded-2xl p-4 space-y-2">
-                      <p className="font-semibold text-sm">💳 סוג התשלום</p>
-                      <p className="text-sm text-muted-foreground">
-                        תשלום חד פעמי (בלי הוראת קבע)
-                      </p>
-                    </div>
-
-                    <div className="bg-surface-2 rounded-2xl p-4 space-y-2">
-                      <p className="font-semibold text-sm">💰 סכום</p>
-                      {currentActivity.priceAmount ? (
-                        <div className="space-y-1">
-                          <p className="text-sm text-muted-foreground">
-                            {currentActivity.priceAmount} ₪ × {participants} {participants === 1 ? "אדם" : "אנשים"}
-                          </p>
-                          <p className="text-lg font-bold text-primary">
-                            {currentActivity.priceAmount * participants} ₪
-                          </p>
-                        </div>
-                      ) : (
-                        <p className="text-lg font-bold text-primary">{currentActivity.price}</p>
-                      )}
-                    </div>
-
-                    <div className="bg-primary/10 rounded-2xl p-4 space-y-2">
-                      <p className="font-semibold text-sm">📍 מקום</p>
-                      <p className="text-sm">{currentActivity.location}</p>
-                    </div>
-
-                    {/* Participants */}
-                    <div className="space-y-3 bg-surface-2 rounded-2xl p-4">
-                      <div>
-                        <label className="block text-sm font-semibold mb-2">👥 כמה משתתפים?</label>
-                        <select
-                          value={participants}
-                          onChange={(e) => setParticipants(parseInt(e.target.value))}
-                          className="w-full px-3 py-2 rounded-lg border border-[var(--color-border)] bg-background text-sm"
-                        >
-                          {[1, 2, 3, 4, 5, 6].map((n) => (
-                            <option key={n} value={n}>{n} {n === 1 ? "אדם" : "אנשים"}</option>
-                          ))}
-                        </select>
-                      </div>
-
-                      <div>
-                        <label className="block text-sm font-semibold mb-2">📝 שמות המשתתפים</label>
-                        <textarea
-                          value={names}
-                          onChange={(e) => setNames(e.target.value)}
-                          placeholder="שם אחד בכל שורה&#10;למשל:&#10;רונית כהן&#10;דני כהן"
-                          rows={3}
-                          className="w-full px-3 py-2 rounded-lg border border-[var(--color-border)] bg-background text-sm resize-none"
-                        />
-                      </div>
-                    </div>
-
-                    <button
-                      onClick={handleRegister}
-                      className="w-full bg-primary text-white py-3 rounded-lg font-semibold hover:bg-primary/90 active:scale-[0.99] transition-colors"
-                    >
-                      המשך לתשלום
-                    </button>
-                  </>
-                )}
-              </div>
-            ) : (
-              <div className="space-y-4 py-8 text-center">
-                <p className="text-lg font-bold text-primary">✓ נרשמת בהצלחה!</p>
-                <p className="text-sm text-muted-foreground">ההרשמה שלך אושרה. תקבלו הודעת אישור בדוא"ל.</p>
-              </div>
-            )}
-          </div>
         </div>
       )}
 
