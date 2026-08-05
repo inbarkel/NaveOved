@@ -42,7 +42,6 @@ export default function SettingsPage() {
   const [dependents, setDependents] = useState<Dependent[]>([]);
   const [newDependentName, setNewDependentName] = useState('');
   const [newDependentBirthDate, setNewDependentBirthDate] = useState('');
-  const [newDependentGender, setNewDependentGender] = useState('');
   const [isSaving, setIsSaving] = useState(false);
   const [saveMessage, setSaveMessage] = useState('');
 
@@ -122,11 +121,10 @@ export default function SettingsPage() {
       return;
     }
     try {
-      const newDependent = await addDependentRemote(user.id, newDependentName, newDependentBirthDate, newDependentGender);
+      const newDependent = await addDependentRemote(user.id, newDependentName, newDependentBirthDate);
       setDependents([...dependents, newDependent]);
       setNewDependentName('');
       setNewDependentBirthDate('');
-      setNewDependentGender('');
     } catch (err) {
       console.error('Error adding dependent:', err);
       setSaveMessage('❌ שגיאה בהוספת הילד');
@@ -240,33 +238,27 @@ export default function SettingsPage() {
         <div className="border-t pt-4 space-y-2">
           <p className="text-sm font-semibold">הוסף ילד</p>
 
-          <input
-            type="text"
-            value={newDependentName}
-            onChange={(e) => setNewDependentName(e.target.value)}
-            placeholder="שם הילד"
-            className="w-full px-4 py-2 rounded-lg border border-[var(--color-border)] bg-surface text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50"
-          />
+          <div>
+            <label className="block text-xs text-muted-foreground mb-1">שם הילד</label>
+            <input
+              type="text"
+              value={newDependentName}
+              onChange={(e) => setNewDependentName(e.target.value)}
+              placeholder="שם הילד"
+              className="w-full px-4 py-2 rounded-lg border border-[var(--color-border)] bg-surface text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50"
+            />
+          </div>
 
-          <input
-            type="date"
-            value={newDependentBirthDate}
-            onChange={(e) => setNewDependentBirthDate(e.target.value)}
-            lang="he-IL"
-            placeholder="dd/mm/yyyy"
-            className="w-full px-4 py-2 rounded-lg border border-[var(--color-border)] bg-surface text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50"
-          />
-
-          <select
-            value={newDependentGender}
-            onChange={(e) => setNewDependentGender(e.target.value)}
-            className="w-full px-4 py-2 rounded-lg border border-[var(--color-border)] bg-surface text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50"
-          >
-            <option value="">בחר מין</option>
-            <option value="male">זכר</option>
-            <option value="female">נקבה</option>
-            <option value="other">אחר</option>
-          </select>
+          <div>
+            <label className="block text-xs text-muted-foreground mb-1">תאריך לידה</label>
+            <input
+              type="date"
+              value={newDependentBirthDate}
+              onChange={(e) => setNewDependentBirthDate(e.target.value)}
+              lang="he-IL"
+              className="w-full px-4 py-2 rounded-lg border border-[var(--color-border)] bg-surface text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50"
+            />
+          </div>
 
           <button
             onClick={addDependent}

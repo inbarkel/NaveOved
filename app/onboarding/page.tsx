@@ -10,7 +10,6 @@ interface Dependent {
   id?: string;
   full_name: string;
   birth_date: string;
-  gender?: string;
 }
 
 export default function OnboardingPage() {
@@ -20,7 +19,7 @@ export default function OnboardingPage() {
   const [birthDate, setBirthDate] = useState('');
   const [gender, setGender] = useState('');
   const [dependents, setDependents] = useState<Dependent[]>([]);
-  const [newChild, setNewChild] = useState({ name: '', birthDate: '', gender: '' });
+  const [newChild, setNewChild] = useState({ name: '', birthDate: '' });
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
 
@@ -47,10 +46,9 @@ export default function OnboardingPage() {
       {
         full_name: newChild.name,
         birth_date: newChild.birthDate,
-        gender: newChild.gender,
       },
     ]);
-    setNewChild({ name: '', birthDate: '', gender: '' });
+    setNewChild({ name: '', birthDate: '' });
     setError('');
   };
 
@@ -279,36 +277,18 @@ export default function OnboardingPage() {
                   className="w-full px-4 py-2 rounded-lg border border-[var(--color-border)] bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 disabled:opacity-50"
                 />
               </div>
-              <div className="grid grid-cols-2 gap-3">
-                <div>
-                  <label className="block text-sm font-semibold text-foreground mb-1">
-                    תאריך לידה
-                  </label>
-                  <input
-                    type="date"
-                    value={newChild.birthDate}
-                    onChange={(e) => setNewChild({ ...newChild, birthDate: e.target.value })}
-                    disabled={isLoading}
-                    lang="he"
-                    className="w-full px-4 py-2 rounded-lg border border-[var(--color-border)] bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 disabled:opacity-50"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-semibold text-foreground mb-1">
-                    מין
-                  </label>
-                  <select
-                    value={newChild.gender}
-                    onChange={(e) => setNewChild({ ...newChild, gender: e.target.value })}
-                    disabled={isLoading}
-                    className="w-full px-4 py-2 rounded-lg border border-[var(--color-border)] bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 disabled:opacity-50"
-                  >
-                    <option value="">בחר...</option>
-                    <option value="male">זכר</option>
-                    <option value="female">נקבה</option>
-                    <option value="other">אחר</option>
-                  </select>
-                </div>
+              <div>
+                <label className="block text-sm font-semibold text-foreground mb-1">
+                  תאריך לידה
+                </label>
+                <input
+                  type="date"
+                  value={newChild.birthDate}
+                  onChange={(e) => setNewChild({ ...newChild, birthDate: e.target.value })}
+                  disabled={isLoading}
+                  lang="he"
+                  className="w-full px-4 py-2 rounded-lg border border-[var(--color-border)] bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 disabled:opacity-50"
+                />
               </div>
               <button
                 type="button"
@@ -334,7 +314,6 @@ export default function OnboardingPage() {
                       <p className="font-semibold text-sm">{child.full_name}</p>
                       <p className="text-xs text-muted-foreground">
                         לידה: {new Date(child.birth_date).toLocaleDateString('he-IL')}
-                        {child.gender && ` • ${child.gender === 'male' ? 'זכר' : child.gender === 'female' ? 'נקבה' : 'אחר'}`}
                       </p>
                     </div>
                     <button
