@@ -45,7 +45,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
                     <main className="flex-1 pb-20 md:pb-0">{children}</main>
                   </div>
                 </div>
-                <footer className="bg-surface/50 border-t border-[var(--color-border)] text-center py-3 text-xs text-muted-foreground">
+                <footer className="bg-surface/50 border-t border-[var(--color-border)] text-center py-3 pb-20 md:pb-3 text-xs text-muted-foreground">
                   <p>© 2026 ענבר קלר. כל הזכויות שמורות.</p>
                 </footer>
               </div>

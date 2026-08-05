@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { Shield, LogOut } from "lucide-react";
+import { Shield, LogOut, LogIn } from "lucide-react";
 import { AccessibilityToggle } from "@/components/accessibility/AccessibilityPanel";
 import { ThemeToggle } from "@/components/theme/ThemeToggle";
 import { useAuth } from "@/lib/auth-context";
@@ -31,7 +31,7 @@ export function Header() {
             <Shield className="w-5 h-5" aria-hidden />
           </Link>
         )}
-        {user && (
+        {user ? (
           <button
             onClick={handleLogout}
             aria-label="התנתק"
@@ -40,6 +40,16 @@ export function Header() {
           >
             <LogOut className="w-5 h-5" aria-hidden />
           </button>
+        ) : (
+          <Link
+            href="/login"
+            aria-label="התחברות"
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-primary text-primary-foreground text-sm font-semibold hover:bg-primary/90 transition-colors"
+            title="התחברות"
+          >
+            <LogIn className="w-4 h-4" aria-hidden />
+            התחברות
+          </Link>
         )}
         <ThemeToggle />
         <AccessibilityToggle />

@@ -56,7 +56,7 @@ export default function RentalsPage() {
         <ChevronRight className="w-4 h-4" aria-hidden />
         חזרה לקהילה
       </Link>
-      <h1 className="font-serif text-2xl font-bold">שכירות</h1>
+      <h1 className="font-sans text-2xl font-bold">שכירות</h1>
 
       <div className="space-y-3">
         {items.map((item) => {
@@ -68,7 +68,7 @@ export default function RentalsPage() {
             >
               <div className="flex items-start gap-3">
                 <div className="flex-1 min-w-0">
-                  <p className="font-serif font-bold">{item.title}</p>
+                  <p className="font-semibold">{item.title}</p>
                   <p className="text-sm mt-1 text-foreground/90">{item.body}</p>
                   {item.contactPhone && (
                     <a href={`tel:${item.contactPhone}`} className="text-sm text-primary font-semibold mt-2 inline-block">
