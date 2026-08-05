@@ -66,6 +66,17 @@ export default function OnboardingPage() {
       setError('נא למלא שם ותאריך לידה');
       return;
     }
+    const today = new Date();
+    const birth = new Date(newChild.birthDate);
+    let age = today.getFullYear() - birth.getFullYear();
+    const monthDiff = today.getMonth() - birth.getMonth();
+    if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birth.getDate())) {
+      age--;
+    }
+    if (age >= 18) {
+      setError('ניתן להוסיף רק ילדים מתחת לגיל 18');
+      return;
+    }
     setDependents([
       ...dependents,
       {
@@ -317,6 +328,7 @@ export default function OnboardingPage() {
                   onChange={(e) => setNewChild({ ...newChild, birthDate: e.target.value })}
                   disabled={isLoading}
                   lang="he"
+                  max={new Date().toISOString().slice(0, 10)}
                   className="w-full px-4 py-2 rounded-lg border border-[var(--color-border)] bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 disabled:opacity-50"
                 />
               </div>

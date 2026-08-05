@@ -122,6 +122,10 @@ export default function SettingsPage() {
       setSaveMessage('❌ נא למלא את שם הילד ותאריך הלידה');
       return;
     }
+    if (calculateAge(newDependentBirthDate) >= 18) {
+      setSaveMessage('❌ ניתן להוסיף רק ילדים מתחת לגיל 18');
+      return;
+    }
     try {
       if (supabase) {
         const { error: profileError } = await supabase
@@ -264,6 +268,7 @@ export default function SettingsPage() {
               value={newDependentBirthDate}
               onChange={(e) => setNewDependentBirthDate(e.target.value)}
               lang="he-IL"
+              max={new Date().toISOString().slice(0, 10)}
               className="w-full px-4 py-2 rounded-lg border border-[var(--color-border)] bg-surface text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50"
             />
           </div>
