@@ -100,8 +100,10 @@ export default function SettingsPage() {
       } else {
         const { error } = await supabase
           .from('profiles')
-          .update({ full_name: fullName, birth_date: birthDate, gender })
-          .eq('id', user.id);
+          .upsert(
+            { id: user.id, full_name: fullName, birth_date: birthDate, gender },
+            { onConflict: 'id' }
+          );
         if (error) throw error;
       }
       setSaveMessage('✓ הפרטים נשמרו בהצלחה');
@@ -121,6 +123,12 @@ export default function SettingsPage() {
       return;
     }
     try {
+      if (supabase) {
+        const { error: profileError } = await supabase
+          .from('profiles')
+          .upsert({ id: user.id, full_name: fullName }, { onConflict: 'id', ignoreDuplicates: true });
+        if (profileError) throw profileError;
+      }
       const newDependent = await addDependentRemote(user.id, newDependentName, newDependentBirthDate);
       setDependents([...dependents, newDependent]);
       setNewDependentName('');
