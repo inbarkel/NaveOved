@@ -101,7 +101,7 @@ export default function SettingsPage() {
         const { error } = await supabase
           .from('profiles')
           .upsert(
-            { id: user.id, full_name: fullName, birth_date: birthDate, gender },
+            { id: user.id, full_name: fullName, birth_date: birthDate || null, gender },
             { onConflict: 'id' }
           );
         if (error) throw error;

@@ -21,6 +21,7 @@ export default function HomePage() {
   const { user } = useAuth();
   const [userStatus, setUserStatus] = useState<string | null>(null);
   const [statusLoading, setStatusLoading] = useState(true);
+  const [firstName, setFirstName] = useState<string | null>(null);
   const [nearestActivity, setNearestActivity] = useState<ReturnType<typeof applyOverride> | null>(null);
 
   useEffect(() => {
@@ -53,6 +54,7 @@ export default function HomePage() {
           if (profile) {
             const parsed = JSON.parse(profile);
             setUserStatus(parsed.status || 'active');
+            setFirstName(parsed.full_name?.split(' ')[0] || null);
           }
           setStatusLoading(false);
           return;
@@ -60,11 +62,12 @@ export default function HomePage() {
 
         const { data } = await supabase
           .from('profiles')
-          .select('status')
+          .select('status, full_name')
           .eq('id', user.id)
           .single();
 
         setUserStatus(data?.status || 'active');
+        setFirstName(data?.full_name?.split(' ')[0] || null);
       } catch (err) {
         console.error('Error fetching user status:', err);
         setUserStatus('active');
@@ -80,6 +83,10 @@ export default function HomePage() {
     <div>
       <Hero />
       <div className="max-w-2xl mx-auto px-4 py-5 space-y-6">
+        {firstName && (
+          <p className="font-sans text-xl font-bold">שלום {firstName}</p>
+        )}
+
         {/* Status Banner */}
         {userStatus === 'pending' && !statusLoading && (
           <div className="flex items-start gap-3 rounded-2xl bg-amber-50 dark:bg-amber-950/30 px-4 py-3 border border-amber-200 dark:border-amber-800">

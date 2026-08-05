@@ -92,7 +92,7 @@ export default function OnboardingPage() {
           id: user.id,
           full_name: fullName,
           status: 'pending',
-          birth_date: birthDate,
+          birth_date: birthDate || null,
           gender,
           created_at: new Date().toISOString(),
         }, {
