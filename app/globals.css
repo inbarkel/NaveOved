@@ -1,0 +1,148 @@
+@import "tailwindcss";
+
+/*
+  Design tokens — "חם ומקומי": נופי כנרת / הר תבור / פוריה.
+  Light and dark are two value-sets of the same semantic tokens, not a flat invert.
+*/
+:root {
+  --color-bg: #e8f1e3;
+  --color-surface: #f5f9f3;
+  --color-surface-2: #e0eada;
+  --color-foreground: #1a3a2a;
+  --color-muted-foreground: #5a7563;
+  --color-border: #d0dfc9;
+
+  --color-primary: #3f5b34;
+  --color-primary-foreground: #faf6ee;
+  --color-secondary: #c97b4a;
+  --color-secondary-foreground: #faf6ee;
+  --color-accent: #c8952e;
+  --color-accent-foreground: #2a271f;
+
+  --color-urgent: #b3452f;
+  --color-urgent-foreground: #fff5f0;
+  --color-success: #3f5b34;
+
+  --shadow-soft: 0 1px 2px rgba(42, 39, 31, 0.04), 0 8px 24px -8px rgba(42, 39, 31, 0.12);
+  --shadow-lifted: 0 2px 4px rgba(42, 39, 31, 0.06), 0 16px 40px -12px rgba(42, 39, 31, 0.18);
+}
+
+:root[data-theme="dark"] {
+  --color-bg: #1a3a2a;
+  --color-surface: #2d4a38;
+  --color-surface-2: #386b4e;
+  --color-foreground: #e8f1e3;
+  --color-muted-foreground: #a8c49d;
+  --color-border: #4a6b57;
+
+  --color-primary: #8fb373;
+  --color-primary-foreground: #17160f;
+  --color-secondary: #e0996a;
+  --color-secondary-foreground: #17160f;
+  --color-accent: #e0b654;
+  --color-accent-foreground: #17160f;
+
+  --color-urgent: #e2745a;
+  --color-urgent-foreground: #201009;
+  --color-success: #8fb373;
+
+  --shadow-soft: 0 1px 2px rgba(0, 0, 0, 0.24), 0 8px 24px -8px rgba(0, 0, 0, 0.5);
+  --shadow-lifted: 0 2px 4px rgba(0, 0, 0, 0.3), 0 16px 40px -12px rgba(0, 0, 0, 0.6);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --color-bg: #1a3a2a;
+    --color-surface: #2d4a38;
+    --color-surface-2: #386b4e;
+    --color-foreground: #e8f1e3;
+    --color-muted-foreground: #a8c49d;
+    --color-border: #4a6b57;
+
+    --color-primary: #8fb373;
+    --color-primary-foreground: #17160f;
+    --color-secondary: #e0996a;
+    --color-secondary-foreground: #17160f;
+    --color-accent: #e0b654;
+    --color-accent-foreground: #17160f;
+
+    --color-urgent: #e2745a;
+    --color-urgent-foreground: #201009;
+    --color-success: #8fb373;
+
+    --shadow-soft: 0 1px 2px rgba(0, 0, 0, 0.24), 0 8px 24px -8px rgba(0, 0, 0, 0.5);
+    --shadow-lifted: 0 2px 4px rgba(0, 0, 0, 0.3), 0 16px 40px -12px rgba(0, 0, 0, 0.6);
+  }
+}
+
+@theme inline {
+  --color-bg: var(--color-bg);
+  --color-surface: var(--color-surface);
+  --color-surface-2: var(--color-surface-2);
+  --color-foreground: var(--color-foreground);
+  --color-muted-foreground: var(--color-muted-foreground);
+  --color-border: var(--color-border);
+
+  --color-primary: var(--color-primary);
+  --color-primary-foreground: var(--color-primary-foreground);
+  --color-secondary: var(--color-secondary);
+  --color-secondary-foreground: var(--color-secondary-foreground);
+  --color-accent: var(--color-accent);
+  --color-accent-foreground: var(--color-accent-foreground);
+  --color-urgent: var(--color-urgent);
+  --color-urgent-foreground: var(--color-urgent-foreground);
+  --color-success: var(--color-success);
+
+  --font-sans: var(--font-body);
+}
+
+html {
+  color-scheme: light;
+}
+html[data-theme="dark"] {
+  color-scheme: dark;
+}
+
+body {
+  background: linear-gradient(135deg, var(--color-bg) 0%, rgba(212, 232, 207, 0.3) 100%),
+              linear-gradient(45deg, transparent 30%, rgba(63, 91, 52, 0.03) 70%),
+              var(--color-bg);
+  background-attachment: fixed;
+  color: var(--color-foreground);
+  font-family: var(--font-body), system-ui, sans-serif;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+/* כל הטקסט כולל כותרות משתמש ב-Heebo */
+h1, h2, h3 {
+  font-family: var(--font-body), sans-serif;
+}
+
+button, input, select, textarea {
+  font-family: inherit;
+}
+
+/* נגישות: טקסט גדול */
+html[data-a11y-large-text="true"] {
+  font-size: 118%;
+}
+
+/* נגישות: ניגודיות גבוהה */
+html[data-a11y-contrast="true"] body {
+  background: #000000 !important;
+  color: #ffffff !important;
+}
+html[data-a11y-contrast="true"] .contrast-surface {
+  background: #000000 !important;
+  color: #ffffff !important;
+  border-color: #ffffff !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
