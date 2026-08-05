@@ -96,9 +96,12 @@ export default function LoginPage() {
         return;
       }
 
-      // Create temp email and sign up
+      // Create temp email and sign up. The password must be deterministic
+      // (not random) so that returning users can sign back in with the same
+      // credentials - a random password here would only ever work on the
+      // very first login and fail every time after.
       const tempEmail = `phone_${cleanPhone}@local.app`;
-      const tempPassword = Math.random().toString(36).slice(-20);
+      const tempPassword = `neve-oved-demo-${cleanPhone}-a8f3`;
 
       // Try to sign up
       await supabase.auth.signUp({

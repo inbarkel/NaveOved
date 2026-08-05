@@ -22,18 +22,43 @@ export default function OnboardingPage() {
   const [newChild, setNewChild] = useState({ name: '', birthDate: '' });
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
+  const [checkingProfile, setCheckingProfile] = useState(true);
 
   useEffect(() => {
-    if (!authLoading && !user) {
+    if (authLoading) return;
+
+    if (!user) {
       router.push('/login');
+      return;
     }
-    // If user already has a profile, redirect to home
-    if (!authLoading && user) {
-      const savedProfile = localStorage.getItem('user_profile');
-      if (savedProfile) {
-        router.push('/');
+
+    // If the user already has a profile, they've already completed
+    // onboarding once - skip straight to home instead of asking again.
+    const checkExistingProfile = async () => {
+      if (!supabase) {
+        const savedProfile = localStorage.getItem('user_profile');
+        if (savedProfile) {
+          router.push('/');
+          return;
+        }
+        setCheckingProfile(false);
+        return;
       }
-    }
+
+      const { data } = await supabase
+        .from('profiles')
+        .select('id')
+        .eq('id', user.id)
+        .maybeSingle();
+
+      if (data) {
+        router.push('/');
+        return;
+      }
+      setCheckingProfile(false);
+    };
+
+    checkExistingProfile();
   }, [user, authLoading, router]);
 
   const handleAddChild = () => {
@@ -85,13 +110,27 @@ export default function OnboardingPage() {
         return;
       }
 
-      // Create user profile with pending status
+      // Check if this phone is on the committee invitation list - if so,
+      // they're pre-approved by the committee and skip residency approval
+      const cleanPhoneForInvite = localStorage.getItem('pending_phone');
+      let invitation: { id: string } | null = null;
+      if (cleanPhoneForInvite) {
+        const { data } = await supabase
+          .from('committee_invitations')
+          .select('id')
+          .eq('phone_e164', `+972${cleanPhoneForInvite.slice(1)}`)
+          .eq('status', 'pending')
+          .maybeSingle();
+        invitation = data;
+      }
+
+      // Create user profile
       const { error: profileError } = await supabase
         .from('profiles')
         .upsert({
           id: user.id,
           full_name: fullName,
-          status: 'pending',
+          status: invitation ? 'active' : 'pending',
           birth_date: birthDate || null,
           gender,
           created_at: new Date().toISOString(),
@@ -124,16 +163,8 @@ export default function OnboardingPage() {
         }
       }
 
-      // Check if user's phone is in committee_invitations and assign role
-      const cleanPhone = localStorage.getItem('pending_phone');
-      if (cleanPhone) {
-        const { data: invitation } = await supabase
-          .from('committee_invitations')
-          .select('id')
-          .eq('phone_e164', `+972${cleanPhone.slice(1)}`)
-          .eq('status', 'pending')
-          .single();
-
+      // Assign role based on the committee invitation check done above
+      if (cleanPhoneForInvite) {
         if (invitation) {
           // Update invitation status
           await supabase
@@ -145,13 +176,13 @@ export default function OnboardingPage() {
             })
             .eq('id', invitation.id);
 
-          // Create committee role
+          // Create committee role (system-granted via invitation match,
+          // so granted_by is left null - there's no specific granting user)
           await supabase
             .from('user_roles')
             .insert({
               user_id: user.id,
               role: 'committee',
-              granted_by: 'system',
               granted_at: new Date().toISOString(),
             });
         } else {
@@ -161,7 +192,6 @@ export default function OnboardingPage() {
             .insert({
               user_id: user.id,
               role: 'resident',
-              granted_by: 'system',
               granted_at: new Date().toISOString(),
             });
         }
@@ -177,7 +207,7 @@ export default function OnboardingPage() {
     }
   };
 
-  if (authLoading) {
+  if (authLoading || checkingProfile) {
     return (
       <div className="flex items-center justify-center min-h-screen">
         <div className="text-muted-foreground">טוען...</div>
