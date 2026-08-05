@@ -1,13 +1,19 @@
 'use client';
 
 import { useEffect, useState } from "react";
+import Link from "next/link";
 import { Hero } from "@/components/feed/Hero";
 import { QuickActions } from "@/components/feed/QuickActions";
 import { AnnouncementList } from "@/components/feed/AnnouncementList";
+import { GallerySection } from "@/components/community/GallerySection";
+import { Card } from "@/components/ui/Card";
 import { useAnnouncements } from "@/hooks/useAnnouncements";
 import { useAuth } from "@/lib/auth-context";
 import { supabase } from "@/lib/supabase-client";
-import { AlertCircle, Clock } from "lucide-react";
+import { DEMO_CLUBS } from "@/lib/demo-data";
+import { applyOverride, getDeletedActivityIds } from "@/lib/activity-overrides";
+import { getIcon } from "@/lib/icons";
+import { AlertCircle, Clock, MapPin } from "lucide-react";
 import { Trash2 } from "lucide-react";
 
 export default function HomePage() {
@@ -15,6 +21,23 @@ export default function HomePage() {
   const { user } = useAuth();
   const [userStatus, setUserStatus] = useState<string | null>(null);
   const [statusLoading, setStatusLoading] = useState(true);
+  const [nearestActivity, setNearestActivity] = useState<ReturnType<typeof applyOverride> | null>(null);
+
+  useEffect(() => {
+    const deletedIds = getDeletedActivityIds();
+    const now = new Date();
+    const upcoming = DEMO_CLUBS.filter(
+      (e) =>
+        e.kind === "פעילות" &&
+        !e.isExternal &&
+        !deletedIds.includes(e.id) &&
+        e.status !== "cancelled" &&
+        e.eventDate &&
+        new Date(e.eventDate) >= now
+    ).sort((a, b) => new Date(a.eventDate!).getTime() - new Date(b.eventDate!).getTime());
+
+    setNearestActivity(upcoming[0] ? applyOverride(upcoming[0]) : null);
+  }, []);
 
   useEffect(() => {
     const fetchUserStatus = async () => {
@@ -53,8 +76,6 @@ export default function HomePage() {
     fetchUserStatus();
   }, [user]);
 
-  console.log('HomePage: announcements =', announcements.length, 'isLoading =', isLoading);
-
   return (
     <div>
       <Hero />
@@ -86,7 +107,7 @@ export default function HomePage() {
           <div className="contrast-surface flex items-center gap-3 rounded-2xl bg-surface-2 px-4 py-3 text-sm">
             <Trash2 className="w-5 h-5 text-primary shrink-0" aria-hidden />
             <span>
-              פינוי אשפה הקרוב: <span className="font-semibold">יום ראשון בבוקר</span>
+              פינוי אשפה: <span className="font-semibold">ימי ראשון, שלישי וחמישי</span>
             </span>
           </div>
           <div className="contrast-surface flex items-center gap-3 rounded-2xl bg-surface-2 px-4 py-3 text-sm">
@@ -107,6 +128,47 @@ export default function HomePage() {
             <AnnouncementList announcements={announcements} />
           )}
         </section>
+
+        <section className="space-y-3">
+          <div className="flex items-center justify-between">
+            <h2 className="font-sans text-lg font-bold">הפעילות הקרובה</h2>
+            <Link href="/activities" className="text-sm font-semibold text-primary hover:underline">
+              לכל הפעילויות
+            </Link>
+          </div>
+          {nearestActivity ? (
+            <Link href={`/activities/${nearestActivity.id}`} className="block">
+              <Card className="p-4 flex items-center gap-3 active:scale-[0.99] transition-transform">
+                <div className="rounded-xl bg-surface-2 p-2.5 shrink-0">
+                  {(() => {
+                    const Icon = getIcon(nearestActivity.iconKey);
+                    return <Icon className="w-6 h-6 text-primary" aria-hidden />;
+                  })()}
+                </div>
+                <div className="min-w-0 flex-1">
+                  <p className="font-semibold">{nearestActivity.title}</p>
+                  <div className="flex items-center gap-1 text-xs text-muted-foreground mt-1">
+                    <Clock className="w-3.5 h-3.5 shrink-0" aria-hidden />
+                    {new Date(nearestActivity.eventDate!).toLocaleDateString("he-IL", {
+                      weekday: "short",
+                      month: "short",
+                      day: "numeric",
+                    })}{" "}
+                    · {nearestActivity.time}
+                  </div>
+                  <div className="flex items-center gap-1 text-xs text-muted-foreground mt-0.5">
+                    <MapPin className="w-3.5 h-3.5 shrink-0" aria-hidden />
+                    {nearestActivity.location}
+                  </div>
+                </div>
+              </Card>
+            </Link>
+          ) : (
+            <p className="text-sm text-muted-foreground py-4 text-center">אין פעילויות קרובות כרגע</p>
+          )}
+        </section>
+
+        <GallerySection />
       </div>
     </div>
   );

@@ -8,7 +8,7 @@ import { Card } from "@/components/ui/Card";
 type RequestType = "add_phone" | "remove_phone" | "changed_phone" | "technical_issue" | "other";
 
 const REQUEST_TYPES: { key: RequestType; label: string }[] = [
-  { key: "add_phone", label: "אין לי גישה ב-PalGate — בקשת הצטרפות" },
+  { key: "add_phone", label: "אין לי גישה ב-PalGate - בקשת הצטרפות" },
   { key: "remove_phone", label: "הסרת מספר טלפון ישן" },
   { key: "changed_phone", label: "החלפתי מספר טלפון" },
   { key: "technical_issue", label: "השער לא נפתח / תקלה" },

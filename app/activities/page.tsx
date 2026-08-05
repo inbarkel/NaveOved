@@ -179,7 +179,7 @@ export default function ActivitiesPage() {
 
       {scope === "external" && (
         <p className="text-xs text-muted-foreground">
-          פעילויות שמתקיימות מחוץ למושב ומומלצות ע&quot;י הוועד — למידע בלבד, ללא הרשמה או תשלום דרך האפליקציה.
+          פעילויות שמתקיימות מחוץ למושב ומומלצות ע&quot;י הוועד - למידע בלבד, ללא הרשמה או תשלום דרך האפליקציה.
         </p>
       )}
 

@@ -8,7 +8,7 @@ import { Briefcase, Megaphone } from "lucide-react";
 const CATEGORIES: { key: TownBoardItem["category"] | "all"; label: string }[] = [
   { key: "all", label: "הכול" },
   { key: "committee_notice", label: "הודעות ועד" },
-  { key: "job", label: "דרושים" },
+  { key: "job", label: "מכרזים" },
 ];
 
 const CATEGORY_ICON = {

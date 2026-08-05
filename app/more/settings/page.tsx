@@ -172,7 +172,7 @@ export default function SettingsPage() {
 
       {/* פרטים אישיים */}
       <div className="space-y-4 mb-8">
-        <h2 className="font-semibold text-lg">פרטיך</h2>
+        <h2 className="font-semibold text-lg">פרטים</h2>
 
         <div>
           <label className="block text-sm font-semibold mb-2">שם מלא</label>

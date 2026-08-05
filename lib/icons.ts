@@ -33,6 +33,9 @@ import {
   GraduationCap,
   Home,
   Wrench,
+  ScrollText,
+  Accessibility,
+  Lock,
   type LucideIcon,
 } from "lucide-react";
 
@@ -75,6 +78,9 @@ export const ICONS: Record<string, LucideIcon> = {
   education: GraduationCap,
   home: Home,
   services: Wrench,
+  scroll: ScrollText,
+  accessibility: Accessibility,
+  lock: Lock,
 };
 
 export function getIcon(key: string | null | undefined): LucideIcon {

@@ -36,12 +36,12 @@ export function ProgressBar({ registered, minRequired, maxCapacity }: ProgressBa
           <>
             נרשמו <span className="font-semibold text-primary">{registered}</span> מתוך מינימום{" "}
             {minRequired}
-            {maxCapacity ? ` (עד ${maxCapacity})` : ""} — חסרים{" "}
+            {maxCapacity ? ` (עד ${maxCapacity})` : ""} - חסרים{" "}
             <span className="font-semibold text-accent">{missing}</span>!
           </>
         ) : (
           <span className="font-semibold text-accent">
-            🎉 עברנו את המינימום — יתקיים בוודאות!{maxCapacity ? ` (${registered}/${maxCapacity})` : ""}
+            🎉 עברנו את המינימום - יתקיים בוודאות!{maxCapacity ? ` (${registered}/${maxCapacity})` : ""}
           </span>
         )}
       </p>
