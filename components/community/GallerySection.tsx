@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { Plus, Image as ImageIcon } from "lucide-react";
 import { loadItems, saveItems } from "@/lib/community-storage";
+import { useIsCommittee } from "@/lib/use-committee-role";
 
 const STORAGE_KEY = "community_gallery";
 
@@ -12,6 +13,7 @@ const DEMO_PHOTOS = [
 ];
 
 export function GallerySection() {
+  const { isCommittee: isAdmin } = useIsCommittee();
   const [showForm, setShowForm] = useState(false);
   const [formData, setFormData] = useState({ title: "", file: null as File | null });
   const [photos, setPhotos] = useState(DEMO_PHOTOS);
@@ -31,7 +33,7 @@ export function GallerySection() {
     const updated = [...photos, { id: Date.now(), title: formData.title, alt: formData.title }];
     setPhotos(updated);
     saveItems(STORAGE_KEY, updated);
-    setMessage("✓ התמונה שלך הועלתה לאישור הוועד");
+    setMessage("✓ התמונה נוספה לגלריה");
     setFormData({ title: "", file: null });
     setShowForm(false);
     setTimeout(() => setMessage(""), 3000);
@@ -61,7 +63,7 @@ export function GallerySection() {
         ))}
       </div>
 
-      {!showForm && (
+      {isAdmin && !showForm && (
         <button
           onClick={() => setShowForm(true)}
           className="w-full flex items-center justify-center gap-2 py-3 px-4 rounded-lg border border-primary text-primary hover:bg-primary/10 font-semibold transition-colors"
@@ -71,7 +73,7 @@ export function GallerySection() {
         </button>
       )}
 
-      {showForm && (
+      {isAdmin && showForm && (
         <form onSubmit={handleAddPhoto} className="bg-surface rounded-2xl p-4 border border-[var(--color-border)] space-y-3">
           <div>
             <label className="block text-sm font-semibold mb-1">כותרת</label>
@@ -95,7 +97,7 @@ export function GallerySection() {
           </div>
           <div className="flex gap-2">
             <button type="submit" className="flex-1 bg-primary text-white py-2 rounded-lg font-semibold hover:bg-primary/90">
-              שלח לאישור
+              הוספה
             </button>
             <button
               type="button"
@@ -105,7 +107,6 @@ export function GallerySection() {
               ביטול
             </button>
           </div>
-          <p className="text-xs text-muted-foreground text-center">⏳ התמונה שלך תופיע כאן כשהוועד יאישור</p>
         </form>
       )}
     </section>

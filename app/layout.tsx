@@ -16,6 +16,11 @@ const body = Heebo({
 export const metadata: Metadata = {
   title: "פוריה נווה עובד",
   description: "אפליקציית הקהילה של מושב נווה עובד (פוריה)",
+  openGraph: {
+    title: "פוריה נווה עובד",
+    description: "אפליקציית הקהילה של מושב נווה עובד (פוריה)",
+    images: ["/images/logo.png"],
+  },
 };
 
 export const viewport: Viewport = {
