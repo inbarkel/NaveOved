@@ -15,6 +15,7 @@ import {
   getEffectiveDeadline,
 } from "@/lib/activity-overrides";
 import { useIsCommittee } from "@/lib/use-committee-role";
+import { CreateActivityForm } from "@/components/clubs/CreateActivityForm";
 
 const AGE_RANGES = [
   { min: 0, max: 3, label: "0-3" },
@@ -44,6 +45,7 @@ export default function ActivitiesPage() {
   const [customActivities, setCustomActivities] = useState<ClubEvent[]>([]);
   const { isCommittee: isAdmin } = useIsCommittee();
   const [showCreateForm, setShowCreateForm] = useState(false);
+  const [showAddActivity, setShowAddActivity] = useState(false);
   const [newActivity, setNewActivity] = useState(EMPTY_NEW_ACTIVITY);
 
   useEffect(() => {
@@ -53,7 +55,7 @@ export default function ActivitiesPage() {
 
   const now = new Date();
 
-  const activities = [...DEMO_CLUBS.filter((e) => e.kind === "פעילות"), ...customActivities]
+  const activities = [...DEMO_CLUBS.filter((e) => e.kind === "פעילות"), ...customActivities.filter((e) => e.kind === "פעילות")]
     .filter((event) => {
       if (deletedIds.includes(event.id)) return false;
       if (Boolean(event.isExternal) !== (scope === "external")) return false;
@@ -128,6 +130,16 @@ export default function ActivitiesPage() {
           פעילויות מחוץ למושב
         </button>
       </div>
+
+      {scope === "internal" && isAdmin && (
+        <button
+          onClick={() => setShowAddActivity(true)}
+          className="w-full flex items-center justify-center gap-2 rounded-lg border border-dashed border-primary text-primary py-2.5 text-sm font-semibold hover:bg-primary/10 transition-colors"
+        >
+          <Plus className="w-4 h-4" />
+          הוספת פעילות חדשה
+        </button>
+      )}
 
       {scope === "internal" && (
         <div className="grid grid-cols-3 gap-2">
@@ -285,6 +297,17 @@ export default function ActivitiesPage() {
             );
           })}
         </div>
+      )}
+
+      {showAddActivity && (
+        <CreateActivityForm
+          defaultKind="פעילות"
+          onClose={() => setShowAddActivity(false)}
+          onCreated={() => {
+            setCustomActivities(getCustomActivities());
+            setShowAddActivity(false);
+          }}
+        />
       )}
 
       {/* Create External Activity Modal */}

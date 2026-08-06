@@ -6,6 +6,8 @@ import { useAuth } from '@/lib/auth-context';
 import { useIsCommittee } from '@/lib/use-committee-role';
 import { useRouter } from 'next/navigation';
 import { AlertCircle, Users, MessageSquare, AlertTriangle, FileText, Plus, Settings, Briefcase, Trash2, Download, Upload } from 'lucide-react';
+import { CreateActivityForm } from '@/components/clubs/CreateActivityForm';
+import { getCustomActivities, deleteActivityById } from '@/lib/activity-overrides';
 
 type TabType = 'announcements' | 'users' | 'moderation' | 'gate' | 'content' | 'committee' | 'registrations';
 
@@ -925,26 +927,81 @@ function RegistrationsTab({ onMessage }: any) {
 }
 
 function ContentTab({ onMessage, userId, isLoading, setIsLoading }: any) {
+  const [showAddActivity, setShowAddActivity] = useState(false);
+  const [customActivities, setCustomActivities] = useState(() => getCustomActivities());
+
+  const handleDelete = (id: string, title: string) => {
+    if (!confirm(`למחוק את "${title}"?`)) return;
+    deleteActivityById(id);
+    setCustomActivities(getCustomActivities());
+    onMessage('✓ נמחק');
+  };
+
   return (
-    <div className="max-w-4xl">
-      <h2 className="font-sans text-xl font-bold mb-4">הוספת תוכן</h2>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        {[
-          { icon: AlertCircle, label: 'רעיונות', desc: 'אישור רעיונות לפני פרסום' },
-          { icon: Plus, label: 'פעילויות', desc: 'הוספת פעילויות וחוגים' },
-          { icon: FileText, label: 'לוח היישוב', desc: 'הוספה לוח היישוב' },
-          { icon: MessageSquare, label: 'קהילה', desc: 'הוספה לגלריית קהילה' },
-        ].map(({ icon: Icon, label, desc }) => (
-          <div key={label} className="bg-surface rounded-2xl p-6 border border-[var(--color-border)]">
-            <Icon className="w-6 h-6 text-primary mb-2" />
-            <h3 className="font-semibold mb-1">{label}</h3>
-            <p className="text-sm text-muted-foreground">{desc}</p>
-            <button className="w-full mt-4 bg-primary/20 text-primary py-2 rounded-lg text-sm font-semibold hover:bg-primary/30 transition-colors">
-              ⏳ בקרוב
-            </button>
-          </div>
-        ))}
+    <div className="max-w-4xl space-y-6">
+      <div>
+        <h2 className="font-sans text-xl font-bold mb-4">הוספת תוכן</h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {[
+            { icon: AlertCircle, label: 'רעיונות', desc: 'אישור רעיונות לפני פרסום', action: null as (() => void) | null },
+            { icon: Plus, label: 'פעילויות וחוגים', desc: 'הוספת פעילויות וחוגים חדשים', action: () => setShowAddActivity(true) },
+            { icon: FileText, label: 'לוח היישוב', desc: 'הוספה לוח היישוב', action: null },
+            { icon: MessageSquare, label: 'קהילה', desc: 'הוספה לגלריית קהילה', action: null },
+          ].map(({ icon: Icon, label, desc, action }) => (
+            <div key={label} className="bg-surface rounded-2xl p-6 border border-[var(--color-border)]">
+              <Icon className="w-6 h-6 text-primary mb-2" />
+              <h3 className="font-semibold mb-1">{label}</h3>
+              <p className="text-sm text-muted-foreground">{desc}</p>
+              {action ? (
+                <button
+                  onClick={action}
+                  className="w-full mt-4 bg-primary text-white py-2 rounded-lg text-sm font-semibold hover:bg-primary/90 transition-colors"
+                >
+                  + הוספה
+                </button>
+              ) : (
+                <button disabled className="w-full mt-4 bg-primary/20 text-primary py-2 rounded-lg text-sm font-semibold cursor-not-allowed">
+                  ⏳ בקרוב
+                </button>
+              )}
+            </div>
+          ))}
+        </div>
       </div>
+
+      {customActivities.length > 0 && (
+        <div>
+          <h2 className="font-sans text-xl font-bold mb-4">פעילויות וחוגים שנוספו</h2>
+          <div className="space-y-2">
+            {customActivities.map((event) => (
+              <div key={event.id} className="flex items-center justify-between bg-surface rounded-xl p-3 border border-[var(--color-border)]">
+                <div className="min-w-0">
+                  <p className="font-semibold text-sm">{event.title}</p>
+                  <p className="text-xs text-muted-foreground">{event.kind}{event.isExternal ? ' · מחוץ למושב' : ''}</p>
+                </div>
+                <button
+                  onClick={() => handleDelete(event.id, event.title)}
+                  className="p-2 hover:bg-red-100 dark:hover:bg-red-900/30 rounded-lg text-red-700 dark:text-red-300 transition-colors shrink-0"
+                >
+                  <Trash2 className="w-4 h-4" />
+                </button>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {showAddActivity && (
+        <CreateActivityForm
+          defaultKind="פעילות"
+          onClose={() => setShowAddActivity(false)}
+          onCreated={() => {
+            setCustomActivities(getCustomActivities());
+            setShowAddActivity(false);
+            onMessage('✓ נוצר בהצלחה');
+          }}
+        />
+      )}
     </div>
   );
 }
