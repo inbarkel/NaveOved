@@ -36,6 +36,7 @@ import {
   ScrollText,
   Accessibility,
   Lock,
+  MessageSquare,
   type LucideIcon,
 } from "lucide-react";
 
@@ -81,6 +82,7 @@ export const ICONS: Record<string, LucideIcon> = {
   scroll: ScrollText,
   accessibility: Accessibility,
   lock: Lock,
+  requests: MessageSquare,
 };
 
 export function getIcon(key: string | null | undefined): LucideIcon {

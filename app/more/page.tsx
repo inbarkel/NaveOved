@@ -4,6 +4,7 @@ import { getIcon } from "@/lib/icons";
 
 const ROWS = [
   { label: "הגדרות אישיות", sub: "עדכון פרטים, ילדים והעדפות", iconKey: "settings", href: "/more/settings" },
+  { label: "פניות לועד", sub: "שליחת בקשה ומעקב אחר פניות קודמות", iconKey: "requests", href: "/more/requests" },
   { label: "מידע שימושי", sub: "פינוי אשפה, מקלטים, גנים, בריאות ועוד", iconKey: "info", href: "/more/info" },
   { label: "מפה", sub: "מפת המושב ורחובות", iconKey: "map", href: "/more/map" },
   { label: "שער", sub: "פתיחה דרך PalGate ודיווח תקלות", iconKey: "gate", href: "/more/gate" },
