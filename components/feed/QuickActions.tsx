@@ -4,7 +4,7 @@ import { getIcon } from "@/lib/icons";
 
 export function QuickActions() {
   return (
-    <div className="grid grid-cols-3 gap-3">
+    <div className="grid grid-cols-2 gap-3">
       {QUICK_ACTIONS.map((action) => {
         const Icon = getIcon(action.iconKey);
         const isEmergency = action.label === "חירום";

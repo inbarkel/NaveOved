@@ -403,6 +403,7 @@ export const QUICK_ACTIONS = [
   { label: "מספרי טלפון", href: "/more/contacts", iconKey: "phone" },
   { label: "חירום", href: "/more/emergency", iconKey: "shield" },
   { label: "וואטסאפ", href: "https://chat.whatsapp.com/Dsqwm62i1EoJvL38y9niB4", iconKey: "megaphone" },
+  { label: "הצעות והצבעות", href: "/community/ideas", iconKey: "idea" },
 ];
 
 export interface ServiceContact {
