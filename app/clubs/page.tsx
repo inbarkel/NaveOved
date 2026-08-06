@@ -56,7 +56,7 @@ export default function ClubsPage() {
   return (
     <div className="max-w-2xl mx-auto px-4 py-5 space-y-5">
       <h1 className="font-sans text-2xl font-bold">חוגים</h1>
-      <p className="text-sm text-muted-foreground">קדם-הרשמה לשנה הבאה</p>
+      <p className="text-sm text-muted-foreground">הרשמה מוקדמת לשנה הבאה</p>
 
       {isAdmin && (
         <button

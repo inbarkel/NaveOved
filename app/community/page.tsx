@@ -7,7 +7,7 @@ const TILES = [
   { label: "יד שנייה", iconKey: "secondhand", href: "/community/secondhand" },
   { label: "אבידות ומציאות", iconKey: "lostfound", href: "/community/lostfound" },
   { label: "שכירות", iconKey: "land", href: "/community/rentals" },
-  { label: "רעיונות והצבעות", iconKey: "idea", href: "/community/ideas" },
+  { label: "הצעות תושבים והצבעות", iconKey: "idea", href: "/community/ideas" },
 ];
 
 export default function CommunityPage() {
@@ -15,7 +15,7 @@ export default function CommunityPage() {
     <div className="max-w-2xl mx-auto px-4 py-5 space-y-5">
       <h1 className="font-sans text-2xl font-bold">קהילה</h1>
       <p className="text-sm text-muted-foreground -mt-3">
-        עסקים, יד שנייה, אבידות ומציאות, שכירות ורעיונות והצבעות - כל התוכן שהתושבים בעצמם יוצרים, במקום אחד.
+        עסקים, יד שנייה, אבידות ומציאות, שכירות והצעות תושבים - כל התוכן שהתושבים בעצמם יוצרים, במקום אחד.
       </p>
 
       <div className="grid grid-cols-2 gap-3">

@@ -41,6 +41,7 @@ const EMPTY_NEW_ACTIVITY = {
 export default function ActivitiesPage() {
   const [scope, setScope] = useState<"internal" | "external">("internal");
   const [ageFilter, setAgeFilter] = useState<string | null>(null);
+  const [hideCancelled, setHideCancelled] = useState(false);
   const [deletedIds, setDeletedIds] = useState<string[]>([]);
   const [customActivities, setCustomActivities] = useState<ClubEvent[]>([]);
   const { isCommittee: isAdmin } = useIsCommittee();
@@ -55,7 +56,7 @@ export default function ActivitiesPage() {
 
   const now = new Date();
 
-  const activities = [...DEMO_CLUBS.filter((e) => e.kind === "פעילות"), ...customActivities.filter((e) => e.kind === "פעילות")]
+  const visibleActivities = [...DEMO_CLUBS.filter((e) => e.kind === "פעילות"), ...customActivities.filter((e) => e.kind === "פעילות")]
     .filter((event) => {
       if (deletedIds.includes(event.id)) return false;
       if (Boolean(event.isExternal) !== (scope === "external")) return false;
@@ -72,7 +73,11 @@ export default function ActivitiesPage() {
       if (!range) return true;
       return (event.ageMinYears ?? 0) <= range.min && (range.max === null || (event.ageMaxYears ?? 100) >= range.max);
     })
-    .map((event) => applyOverride(event));
+    .map((event) => applyOverride(event))
+    .sort((a, b) => (a.status === "cancelled" ? 1 : 0) - (b.status === "cancelled" ? 1 : 0));
+
+  const hasCancelled = visibleActivities.some((e) => e.status === "cancelled");
+  const activities = hideCancelled ? visibleActivities.filter((e) => e.status !== "cancelled") : visibleActivities;
 
   const handleCreateExternalActivity = () => {
     if (!newActivity.title.trim() || !newActivity.eventDateStr) {
@@ -106,7 +111,7 @@ export default function ActivitiesPage() {
   return (
     <div className="max-w-2xl mx-auto px-4 py-5 space-y-5">
       <h1 className="font-sans text-2xl font-bold">פעילויות</h1>
-      <p className="text-sm text-muted-foreground">פעילויות שוטפות מהשנה</p>
+      <p className="text-sm text-muted-foreground">פעילויות ואירועים קרובים</p>
 
       <div className="grid grid-cols-2 gap-2">
         <button
@@ -185,6 +190,18 @@ export default function ActivitiesPage() {
         </button>
       )}
 
+      {hasCancelled && (
+        <label className="flex items-center gap-2 text-sm text-muted-foreground px-1">
+          <input
+            type="checkbox"
+            checked={hideCancelled}
+            onChange={(e) => setHideCancelled(e.target.checked)}
+            className="w-4 h-4 accent-primary"
+          />
+          הסתר פעילויות שבוטלו
+        </label>
+      )}
+
       {activities.length === 0 ? (
         <p className="text-center text-muted-foreground py-8">
           {scope === "internal" ? "אין פעילויות כרגע" : "אין פעילויות מחוץ למושב כרגע"}
@@ -200,17 +217,18 @@ export default function ActivitiesPage() {
               : null;
             const effectiveDeadline = event.isExternal ? null : getEffectiveDeadline(event);
             const registrationClosed = effectiveDeadline ? new Date() > effectiveDeadline : false;
+            const isCancelled = event.status === "cancelled";
             return (
               <div key={event.id} className="space-y-2">
                 <Link href={`/activities/${event.id}`} className="block">
-                  <Card className="p-4 active:scale-[0.99] transition-transform">
+                  <Card className={`p-4 active:scale-[0.99] transition-transform ${isCancelled ? "bg-surface-2/60 opacity-75" : ""}`}>
                     <div className="flex items-start gap-3">
                       <div className="rounded-xl bg-surface-2 p-2.5 shrink-0">
                         <Icon className="w-6 h-6 text-primary" aria-hidden />
                       </div>
                       <div className="min-w-0 flex-1">
                         <div className="flex items-center gap-2 flex-wrap">
-                          <p className="font-sans font-bold">{event.title}</p>
+                          <p className={`font-sans font-bold ${isCancelled ? "line-through text-muted-foreground" : ""}`}>{event.title}</p>
                           {event.status === "cancelled" && (
                             <span className="text-[11px] font-semibold rounded-full bg-red-100 dark:bg-red-900/30 px-2 py-0.5 text-red-700 dark:text-red-300">
                               בוטל
@@ -258,15 +276,15 @@ export default function ActivitiesPage() {
                             {event.location}
                           </span>
                         </div>
-                        <p className="text-sm font-semibold text-secondary mt-1.5">{event.price}</p>
-                        {effectiveDeadline && (
+                        {!isCancelled && <p className="text-sm font-semibold text-secondary mt-1.5">{event.price}</p>}
+                        {!isCancelled && effectiveDeadline && (
                           <p className={`text-xs font-semibold mt-1 ${registrationClosed ? "text-urgent" : "text-muted-foreground"}`}>
                             {registrationClosed
                               ? "ההרשמה נסגרה"
                               : `ניתן להירשם עד ${effectiveDeadline.toLocaleDateString("he-IL", { day: "numeric", month: "long", year: "numeric" })}`}
                           </p>
                         )}
-                        {!event.isExternal && (
+                        {!isCancelled && !event.isExternal && (
                           <div className="mt-3">
                             <ProgressBar
                               registered={event.registered}
@@ -279,7 +297,7 @@ export default function ActivitiesPage() {
                     </div>
                   </Card>
                 </Link>
-                {!event.isExternal && (
+                {!isCancelled && !event.isExternal && (
                   registrationClosed ? (
                     <button disabled className="w-full bg-surface-2 text-muted-foreground py-2 rounded-lg font-semibold cursor-not-allowed">
                       ההרשמה נסגרה

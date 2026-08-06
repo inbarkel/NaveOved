@@ -68,7 +68,7 @@ export default function IdeasPage() {
         חזרה
       </Link>
       <div>
-        <h1 className="font-sans text-2xl font-bold">רעיונות והצבעות</h1>
+        <h1 className="font-sans text-2xl font-bold">הצעות תושבים והצבעות</h1>
         <p className="text-sm text-muted-foreground mt-1">הציעו רעיונות להשבחת המושב והצביעו על הרעיונות שאתם תומכים בהם</p>
       </div>
 

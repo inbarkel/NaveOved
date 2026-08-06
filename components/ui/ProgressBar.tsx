@@ -30,19 +30,21 @@ export function ProgressBar({ registered, minRequired, maxCapacity }: ProgressBa
       <p className="text-xs text-muted-foreground mt-1.5">
         {isFull ? (
           <span className="font-semibold text-urgent">
-            המקומות אזלו ({registered}/{maxCapacity})
+            המקומות מלאו · {registered}/{maxCapacity}
           </span>
         ) : missing > 0 ? (
           <>
-            נרשמו <span className="font-semibold text-primary">{registered}</span> מתוך מינימום{" "}
-            {minRequired}
-            {maxCapacity ? ` (עד ${maxCapacity})` : ""} - חסרים{" "}
-            <span className="font-semibold text-accent">{missing}</span>!
+            <span className="font-semibold text-accent">חסרים עוד {missing} משתתפים</span>
+            {" · "}
+            {registered} מתוך מינימום {minRequired} נרשמו
           </>
         ) : (
-          <span className="font-semibold text-accent">
-            🎉 עברנו את המינימום - יתקיים בוודאות!{maxCapacity ? ` (${registered}/${maxCapacity})` : ""}
-          </span>
+          <>
+            <span className="font-semibold text-primary">הפעילות מתקיימת ✓</span>
+            {" · "}
+            {registered}
+            {maxCapacity ? ` מתוך ${maxCapacity}` : ""} נרשמו
+          </>
         )}
       </p>
     </div>
