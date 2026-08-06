@@ -68,7 +68,7 @@ export function SideRail() {
   const pathname = usePathname();
   return (
     <nav
-      className="hidden md:flex flex-col w-20 shrink-0 border-e border-[var(--color-border)] bg-surface py-6 items-center gap-2"
+      className="hidden md:flex flex-col w-20 shrink-0 border-e border-[var(--color-border)] bg-surface py-6 items-center gap-2 sticky top-0 h-screen overflow-y-auto"
       aria-label="ניווט ראשי"
     >
       {NAV_ITEMS.map((item) => {

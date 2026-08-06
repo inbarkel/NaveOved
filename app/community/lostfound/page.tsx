@@ -11,7 +11,12 @@ const STORAGE_KEY = "community_lostfound";
 
 export default function LostFoundPage() {
   const [showForm, setShowForm] = useState(false);
-  const [formData, setFormData] = useState({ title: "", body: "", contactPhone: "" });
+  const [formData, setFormData] = useState<{ title: string; body: string; contactPhone: string; itemType: "lost" | "found" }>({
+    title: "",
+    body: "",
+    contactPhone: "",
+    itemType: "lost",
+  });
   const [items, setItems] = useState(DEMO_LOSTFOUND);
   const [message, setMessage] = useState("");
 
@@ -34,6 +39,7 @@ export default function LostFoundPage() {
       title: formData.title,
       body: formData.body,
       contactPhone: formData.contactPhone,
+      itemType: formData.itemType,
       createdAt: new Date().toISOString(),
     };
 
@@ -41,7 +47,7 @@ export default function LostFoundPage() {
     setItems(updated);
     saveItems(STORAGE_KEY, updated);
     setMessage("✓ הדיווח שלך הועלה לאישור הוועד");
-    setFormData({ title: "", body: "", contactPhone: "" });
+    setFormData({ title: "", body: "", contactPhone: "", itemType: "lost" });
     setShowForm(false);
     setTimeout(() => setMessage(""), 3000);
   };
@@ -107,7 +113,20 @@ export default function LostFoundPage() {
                   <AlertCircle className="w-5 h-5 text-primary" />
                 </div>
                 <div className="flex-1 min-w-0">
-                  <p className="font-semibold">{item.title}</p>
+                  <div className="flex items-center gap-2 flex-wrap">
+                    <p className="font-semibold">{item.title}</p>
+                    {item.itemType && (
+                      <span
+                        className={`text-[11px] font-semibold rounded-full px-2 py-0.5 shrink-0 ${
+                          item.itemType === "lost"
+                            ? "bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300"
+                            : "bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300"
+                        }`}
+                      >
+                        {item.itemType === "lost" ? "נאבד" : "נמצא"}
+                      </span>
+                    )}
+                  </div>
                   <p className="text-sm text-muted-foreground mt-1">{item.body}</p>
                   {item.contactPhone && (
                     <a href={`tel:${item.contactPhone}`} className="text-sm text-primary font-semibold mt-2 inline-block">
@@ -125,7 +144,7 @@ export default function LostFoundPage() {
 
               {item.resolvedAt && (
                 <div className="mt-2 text-xs text-green-700 dark:text-green-300 font-semibold">
-                  ✓ סימנת כפתור - אנחנו יכולים למחוק
+                  ✓ סומן כהסתדר - אפשר למחוק
                 </div>
               )}
 
@@ -180,6 +199,33 @@ export default function LostFoundPage() {
 
       {showForm && (
         <form onSubmit={handleAddItem} className="bg-surface rounded-2xl p-4 border border-[var(--color-border)] space-y-3">
+          <div>
+            <label className="block text-sm font-semibold mb-1">מה קרה?</label>
+            <div className="grid grid-cols-2 gap-2">
+              <button
+                type="button"
+                onClick={() => setFormData({ ...formData, itemType: "lost" })}
+                className={`py-2 rounded-lg text-sm font-semibold border transition-colors ${
+                  formData.itemType === "lost"
+                    ? "bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300 border-red-300 dark:border-red-800"
+                    : "border-[var(--color-border)] text-muted-foreground"
+                }`}
+              >
+                נאבד לי משהו
+              </button>
+              <button
+                type="button"
+                onClick={() => setFormData({ ...formData, itemType: "found" })}
+                className={`py-2 rounded-lg text-sm font-semibold border transition-colors ${
+                  formData.itemType === "found"
+                    ? "bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300 border-green-300 dark:border-green-800"
+                    : "border-[var(--color-border)] text-muted-foreground"
+                }`}
+              >
+                מצאתי משהו
+              </button>
+            </div>
+          </div>
           <div>
             <label className="block text-sm font-semibold mb-1">שם הפריט</label>
             <input

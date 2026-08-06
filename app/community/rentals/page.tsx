@@ -86,7 +86,7 @@ export default function RentalsPage() {
 
               {item.resolvedAt && (
                 <div className="mt-2 text-xs text-green-700 dark:text-green-300 font-semibold">
-                  ✓ סימנת כפתור - אנחנו יכולים למחוק
+                  ✓ סומן כהושכר - אפשר למחוק
                 </div>
               )}
 
@@ -100,7 +100,7 @@ export default function RentalsPage() {
                   }`}
                 >
                   <Check className="w-4 h-4" />
-                  {item.resolvedAt ? "פתור" : "סימנו פתור"}
+                  {item.resolvedAt ? "הושכר" : "סימנו הושכר"}
                 </button>
 
                 {needsRefresh && (

@@ -126,7 +126,7 @@ export default function SecondhandPage() {
 
               {item.resolvedAt && (
                 <div className="mt-2 text-xs text-green-700 dark:text-green-300 font-semibold">
-                  ✓ סימנת כפתור - אנחנו יכולים למחוק
+                  ✓ סומן כנמכר - אפשר למחוק
                 </div>
               )}
 

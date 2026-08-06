@@ -36,7 +36,7 @@ export const DEMO_ANNOUNCEMENTS: Announcement[] = [
   },
   {
     id: "a4",
-    title: "🌳 עץ נושר בגן השעשועים",
+    title: "🌳 עץ נפל בגן השעשועים",
     body: "עץ גדול נפל באמש בגלל הרוח החזקה. השטח סגור עד לניקוי. צרו זהירות!",
     urgent: true,
     createdAt: "2026-07-29T22:15:00",
@@ -303,6 +303,7 @@ export interface ResidentItem {
   createdAt: string;
   resolvedAt?: string; // תאריך שהמשתמש סימן ✓
   lastRenewedAt?: string; // תאריך ה-renewal האחרון
+  itemType?: "lost" | "found"; // רק לאבידות ומציאות
 }
 
 export const DEMO_RENTALS: ResidentItem[] = [
@@ -345,18 +346,20 @@ export const DEMO_SECONDHAND: ResidentItem[] = [
 export const DEMO_LOSTFOUND: ResidentItem[] = [
   {
     id: "lf1",
-    title: "אבוד: מפתחות עם תג כחול",
-    body: "אבדו מפתחות בחזקה בסביב האולם. תג כחול עם מסגרת מטאל. בעל פגיעות רגשיות.",
+    title: "מפתחות עם תג כחול",
+    body: "אבדו מפתחות בחזקה בסביב האולם. תג כחול עם מסגרת מטאל.",
     contactPhone: "050-4444444",
     createdAt: "2026-08-02T12:00:00",
+    itemType: "lost",
   },
   {
     id: "lf2",
-    title: "מצא: ארנק עם מסמכים",
+    title: "ארנק עם מסמכים",
     body: "מצאתי ארנק עם מסמכים ברחוב הזית. בעל, אנא צור קשר.",
     contactPhone: "052-5555555",
     createdAt: "2026-07-30T17:20:00",
     resolvedAt: "2026-08-02T10:30:00", // סימנו ✓
+    itemType: "found",
   },
 ];
 
