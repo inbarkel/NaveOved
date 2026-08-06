@@ -70,6 +70,7 @@ export function ActivityDetailClient({
       instructorName: event.instructorName,
       instructorPhone: event.instructorPhone,
       registrationDeadline: event.registrationDeadline,
+      image: event.image,
     });
     setUseCustomDeadline(!!event.registrationDeadline);
     setShowEditForm(true);
@@ -256,6 +257,22 @@ export function ActivityDetailClient({
                   rows={3}
                   className="w-full px-3 py-2 rounded-lg border border-[var(--color-border)] bg-background text-sm resize-none"
                 />
+              </div>
+              <div>
+                <label className="block text-sm font-semibold mb-1">קישור לתמונה</label>
+                <input
+                  type="text"
+                  value={form.image || ''}
+                  onChange={(e) => setForm({ ...form, image: e.target.value })}
+                  placeholder="https://..."
+                  className="w-full px-3 py-2 rounded-lg border border-[var(--color-border)] bg-background text-sm"
+                  dir="ltr"
+                />
+                {form.image && (
+                  <div className="relative w-full h-32 mt-2 rounded-lg overflow-hidden bg-surface-2">
+                    <Image src={form.image} alt="" fill sizes="100vw" className="object-cover" />
+                  </div>
+                )}
               </div>
               <div>
                 <label className="block text-sm font-semibold mb-1">שעה</label>

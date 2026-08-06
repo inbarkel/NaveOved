@@ -17,6 +17,7 @@ export type ActivityOverride = Partial<
     | 'instructorName'
     | 'instructorPhone'
     | 'registrationDeadline'
+    | 'image'
   >
 >;
 
