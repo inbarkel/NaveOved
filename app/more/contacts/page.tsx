@@ -34,6 +34,17 @@ const DEFAULT_CONTACTS: Contact[] = [
 ];
 
 const EMPTY_FORM = { category: "", name: "", phone: "" };
+const NEW_CATEGORY = "__new__";
+const CATEGORY_ORDER = ["המושב", "מכולות", "שירותי רפואה", "בית חולים פוריה", "מועצה", "חירום כללי"];
+
+function compareCategories(a: string, b: string) {
+  const ai = CATEGORY_ORDER.indexOf(a);
+  const bi = CATEGORY_ORDER.indexOf(b);
+  if (ai !== -1 && bi !== -1) return ai - bi;
+  if (ai !== -1) return -1;
+  if (bi !== -1) return 1;
+  return a.localeCompare(b, "he");
+}
 
 export default function ContactsPage() {
   const { isCommittee: isAdmin } = useIsCommittee();
@@ -42,6 +53,7 @@ export default function ContactsPage() {
   const [showForm, setShowForm] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [form, setForm] = useState(EMPTY_FORM);
+  const [isNewCategory, setIsNewCategory] = useState(false);
   const [message, setMessage] = useState("");
 
   useEffect(() => {
@@ -72,15 +84,19 @@ export default function ContactsPage() {
     return acc;
   }, {});
 
+  const categories = Object.keys(grouped).sort(compareCategories);
+
   const openAddForm = () => {
     setEditingId(null);
     setForm(EMPTY_FORM);
+    setIsNewCategory(categories.length === 0);
     setShowForm(true);
   };
 
   const openEditForm = (c: Contact) => {
     setEditingId(c.id);
     setForm({ category: c.category, name: c.name, phone: c.phone });
+    setIsNewCategory(!categories.includes(c.category));
     setShowForm(true);
   };
 
@@ -155,7 +171,9 @@ export default function ContactsPage() {
 
       {!isLoading && (
         <div className="space-y-6">
-          {Object.entries(grouped).map(([category, numbers]) => (
+          {categories.map((category) => {
+            const numbers = grouped[category];
+            return (
             <div key={category}>
               <h2 className="font-sans font-bold text-sm text-muted-foreground mb-2 px-1">{category}</h2>
               <div className="space-y-2">
@@ -191,7 +209,8 @@ export default function ContactsPage() {
                 ))}
               </div>
             </div>
-          ))}
+            );
+          })}
         </div>
       )}
 
@@ -207,13 +226,52 @@ export default function ContactsPage() {
             <div className="space-y-3">
               <div>
                 <label className="block text-sm font-semibold mb-1">קטגוריה</label>
-                <input
-                  type="text"
-                  value={form.category}
-                  onChange={(e) => setForm({ ...form, category: e.target.value })}
-                  placeholder="למשל: המושב, שירותי רפואה"
-                  className="w-full px-3 py-2 rounded-lg border border-[var(--color-border)] bg-background text-sm"
-                />
+                {!isNewCategory ? (
+                  <select
+                    value={form.category}
+                    onChange={(e) => {
+                      if (e.target.value === NEW_CATEGORY) {
+                        setIsNewCategory(true);
+                        setForm({ ...form, category: "" });
+                      } else {
+                        setForm({ ...form, category: e.target.value });
+                      }
+                    }}
+                    className="w-full px-3 py-2 rounded-lg border border-[var(--color-border)] bg-background text-sm"
+                  >
+                    <option value="" disabled>
+                      בחר קטגוריה
+                    </option>
+                    {categories.map((cat) => (
+                      <option key={cat} value={cat}>
+                        {cat}
+                      </option>
+                    ))}
+                    <option value={NEW_CATEGORY}>+ קטגוריה חדשה...</option>
+                  </select>
+                ) : (
+                  <div className="flex gap-2">
+                    <input
+                      type="text"
+                      value={form.category}
+                      onChange={(e) => setForm({ ...form, category: e.target.value })}
+                      placeholder="שם הקטגוריה החדשה"
+                      className="flex-1 px-3 py-2 rounded-lg border border-[var(--color-border)] bg-background text-sm"
+                    />
+                    {categories.length > 0 && (
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setIsNewCategory(false);
+                          setForm({ ...form, category: "" });
+                        }}
+                        className="px-3 py-2 rounded-lg border border-[var(--color-border)] text-sm text-muted-foreground hover:bg-surface-2 transition-colors"
+                      >
+                        ביטול
+                      </button>
+                    )}
+                  </div>
+                )}
               </div>
               <div>
                 <label className="block text-sm font-semibold mb-1">שם</label>
