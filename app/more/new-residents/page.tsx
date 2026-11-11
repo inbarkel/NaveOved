@@ -14,7 +14,7 @@ export default function NewResidentsPage() {
         <ChevronRight className="w-4 h-4" aria-hidden />
         חזרה
       </Link>
-      <h1 className="font-serif text-2xl font-bold">לתושבים חדשים</h1>
+      <h1 className="font-sans text-2xl font-bold">לתושבים חדשים</h1>
       <p className="text-sm text-muted-foreground -mt-3">ברוכים הבאים למושב! כל מה שצריך כדי להתארגן, במקום אחד.</p>
 
       <Link href="/more/gate" className="block">

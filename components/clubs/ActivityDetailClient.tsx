@@ -158,7 +158,7 @@ export function ActivityDetailClient({
 
         <div>
           <div className="flex items-center gap-2 flex-wrap">
-            <h1 className="font-serif text-2xl font-bold">{event.title}</h1>
+            <h1 className="font-sans text-2xl font-extrabold">{event.title}</h1>
             <span className="text-[11px] font-semibold rounded-full bg-surface-2 px-2 py-0.5 text-muted-foreground">
               {event.kind}
             </span>
@@ -173,7 +173,7 @@ export function ActivityDetailClient({
               </span>
             )}
           </div>
-          <p className="text-sm font-semibold text-secondary mt-1.5">{event.price}</p>
+          {!event.infoOnly && event.price && <p className="text-sm font-semibold text-secondary mt-1.5">{event.price}</p>}
         </div>
 
         <p className="text-sm leading-relaxed text-foreground/90">{event.description}</p>
@@ -194,20 +194,22 @@ export function ActivityDetailClient({
           ) : (
             <div className="flex items-center gap-2">
               <Clock className="w-4 h-4 text-primary shrink-0" aria-hidden />
-              {event.daysOfWeek.join(', ')} · {event.time}
+              {event.daysOfWeek.join(', ')} · <bdi dir="ltr">{event.time}</bdi>
             </div>
           )}
           <div className="flex items-center gap-2">
             <MapPin className="w-4 h-4 text-primary shrink-0" aria-hidden />
             {event.location}
           </div>
-          <div className="flex items-center gap-2">
-            <User className="w-4 h-4 text-primary shrink-0" aria-hidden />
-            {event.instructorName} · {event.instructorPhone}
-          </div>
+          {(event.instructorName || event.instructorPhone) && (
+            <div className="flex items-center gap-2">
+              <User className="w-4 h-4 text-primary shrink-0" aria-hidden />
+              {[event.instructorName, event.instructorPhone].filter(Boolean).join(' · ')}
+            </div>
+          )}
         </div>
 
-        {!event.isExternal && effectiveDeadline && (
+        {!event.isExternal && !event.infoOnly && effectiveDeadline && (
           <p className={`text-sm font-semibold ${registrationClosed ? 'text-urgent' : 'text-muted-foreground'}`}>
             {registrationClosed
               ? 'ההרשמה נסגרה'
@@ -215,7 +217,13 @@ export function ActivityDetailClient({
           </p>
         )}
 
-        {!event.isExternal && (
+        {event.infoOnly && (
+          <p className="rounded-xl border border-[var(--color-border)] bg-surface-2 px-4 py-3 text-sm leading-relaxed">
+            לפרטים על מחיר והרשמה אפשר לפנות למדריך/ה או למזכירות המושב: 04-6750042.
+          </p>
+        )}
+
+        {!event.isExternal && !event.infoOnly && (
           <>
             <ProgressBar registered={event.registered} minRequired={event.minRequired} maxCapacity={event.maxCapacity} />
 

@@ -263,12 +263,12 @@ export default function ActivitiesPage() {
                                 month: "short",
                                 day: "numeric",
                               })}{" "}
-                              · {event.time}
+                              · <bdi dir="ltr">{event.time}</bdi>
                             </span>
                           ) : (
                             <span className="flex items-center gap-1">
                               <Clock className="w-3.5 h-3.5" aria-hidden />
-                              {event.daysOfWeek.join(", ")} · {event.time}
+                              {event.daysOfWeek.join(", ")} · <bdi dir="ltr">{event.time}</bdi>
                             </span>
                           )}
                           <span className="flex items-center gap-1">

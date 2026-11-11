@@ -15,7 +15,7 @@ export default function AboutPage() {
         <ChevronRight className="w-4 h-4" aria-hidden />
         חזרה
       </Link>
-      <h1 className="font-serif text-2xl font-bold">אודות המושב</h1>
+      <h1 className="font-sans text-2xl font-bold">אודות המושב</h1>
       <p className="text-sm leading-relaxed text-foreground/90">
         פוריה נווה עובד הוא יישוב קהילתי הממוקם על רכס פוריה, סמוך לטבריה, עם נוף לכנרת ולהר תבור. היישוב הוקם ב-1949
         בידי עולים מצפון אפריקה ושייך למועצה האזורית עמק הירדן.

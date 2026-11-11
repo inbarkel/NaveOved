@@ -61,7 +61,7 @@ export default function InfoPage() {
         <ChevronRight className="w-4 h-4" aria-hidden />
         חזרה
       </Link>
-      <h1 className="font-serif text-2xl font-bold">מידע שימושי</h1>
+      <h1 className="font-sans text-2xl font-bold">מידע שימושי</h1>
       <p className="text-sm text-muted-foreground -mt-3">
         פוריה נווה עובד הוקמה ב-1949 בידי עולים מצפון אפריקה, שייכת למועצה האזורית עמק הירדן ויושבת על רכס פוריה מול הכנרת והר תבור.
       </p>

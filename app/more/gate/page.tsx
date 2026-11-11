@@ -25,7 +25,7 @@ export default function GatePage() {
         <ChevronRight className="w-4 h-4" aria-hidden />
         חזרה
       </Link>
-      <h1 className="font-serif text-2xl font-bold">שער</h1>
+      <h1 className="font-sans text-2xl font-bold">שער</h1>
       <p className="text-sm text-muted-foreground -mt-3">
         פתיחת השער נעשית דרך אפליקציית PalGate. הוועד מנהל את רשימת המספרים המורשים בתוך PalGate עצמה.
       </p>

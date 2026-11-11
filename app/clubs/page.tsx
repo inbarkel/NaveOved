@@ -56,7 +56,7 @@ export default function ClubsPage() {
   return (
     <div className="max-w-2xl mx-auto px-4 py-5 space-y-5">
       <h1 className="font-sans text-2xl font-bold">חוגים</h1>
-      <p className="text-sm text-muted-foreground">הרשמה מוקדמת לשנה הבאה</p>
+      <p className="text-sm text-muted-foreground">לוח החוגים השבועי של המושב: ימים, שעות ומקומות</p>
 
       {isAdmin && (
         <button
@@ -149,7 +149,7 @@ export default function ClubsPage() {
                         <div className="flex flex-wrap gap-x-4 gap-y-1 text-xs text-muted-foreground mt-1.5">
                           <span className="flex items-center gap-1">
                             <Clock className="w-3.5 h-3.5" aria-hidden />
-                            {event.daysOfWeek.join(", ")} · {event.time}
+                            {event.daysOfWeek.join(", ")} · <bdi dir="ltr">{event.time}</bdi>
                           </span>
                           {event.startDate && event.endDate && (
                             <span className="flex items-center gap-1 text-[11px]">
@@ -169,26 +169,28 @@ export default function ClubsPage() {
                             {event.location}
                           </span>
                         </div>
-                        <p className="text-sm font-semibold text-secondary mt-1.5">{event.price}</p>
-                        {effectiveDeadline && (
+                        {!event.infoOnly && event.price && <p className="text-sm font-semibold text-secondary mt-1.5">{event.price}</p>}
+                        {!event.infoOnly && effectiveDeadline && (
                           <p className={`text-xs font-semibold mt-1 ${registrationClosed ? "text-urgent" : "text-muted-foreground"}`}>
                             {registrationClosed
                               ? "ההרשמה נסגרה"
                               : `ניתן להירשם עד ${effectiveDeadline.toLocaleDateString("he-IL", { day: "numeric", month: "long", year: "numeric" })}`}
                           </p>
                         )}
-                        <div className="mt-3">
-                          <ProgressBar
-                            registered={event.registered}
-                            minRequired={event.minRequired}
-                            maxCapacity={event.maxCapacity}
-                          />
-                        </div>
+                        {!event.infoOnly && (
+                          <div className="mt-3">
+                            <ProgressBar
+                              registered={event.registered}
+                              minRequired={event.minRequired}
+                              maxCapacity={event.maxCapacity}
+                            />
+                          </div>
+                        )}
                       </div>
                     </div>
                   </Card>
                 </Link>
-                {registrationClosed ? (
+                {event.infoOnly ? null : registrationClosed ? (
                   <button disabled className="w-full bg-surface-2 text-muted-foreground py-2 rounded-lg font-semibold cursor-not-allowed">
                     ההרשמה נסגרה
                   </button>

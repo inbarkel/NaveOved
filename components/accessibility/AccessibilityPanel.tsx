@@ -82,7 +82,7 @@ export function AccessibilityToggle() {
             transition={{ duration: 0.2 }}
           >
             <div className="flex items-center justify-between mb-3">
-              <h3 className="font-serif text-lg font-bold">נגישות</h3>
+              <h3 className="font-sans text-lg font-bold">נגישות</h3>
               <button
                 onClick={() => setOpen(false)}
                 aria-label="סגור"
