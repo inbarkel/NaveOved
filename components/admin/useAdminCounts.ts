@@ -2,6 +2,8 @@
 
 import { useCallback, useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase-client";
+import { loadDemoRequests } from "@/lib/demo-requests";
+import { DEMO_ANNOUNCEMENTS } from "@/lib/demo-data";
 
 export interface AdminCounts {
   pendingResidents: number | null;
@@ -30,6 +32,20 @@ export function useAdminCounts() {
   const [counts, setCounts] = useState<AdminCounts>(EMPTY);
 
   const refresh = useCallback(async () => {
+    if (!supabase) {
+      // Demo mode: numbers come from the built-in demo data and this browser's storage.
+      let stored = 0;
+      try {
+        stored = JSON.parse(localStorage.getItem("demo_announcements") || "[]").length;
+      } catch {}
+      setCounts({
+        pendingResidents: 1,
+        residents: 3,
+        openRequests: loadDemoRequests().filter((r) => r.status !== "resolved").length,
+        announcements: DEMO_ANNOUNCEMENTS.length + stored,
+      });
+      return;
+    }
     const [pendingResidents, openRequests, residents, announcements] = await Promise.all([
       count("profiles", (q) => q.eq("status", "pending")),
       count("committee_requests", (q) => q.neq("status", "resolved")),

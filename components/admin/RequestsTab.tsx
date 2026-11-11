@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase-client";
 import { useAuth } from "@/lib/auth-context";
+import { loadDemoRequests, saveDemoRequests } from "@/lib/demo-requests";
 
 type Status = "open" | "in_progress" | "resolved";
 
@@ -39,8 +40,7 @@ export function RequestsTab({ onMessage, onChanged }: { onMessage: (m: string, t
   const load = useCallback(async () => {
     setLoading(true);
     if (!supabase) {
-      const stored = localStorage.getItem("committee_requests");
-      setItems(stored ? JSON.parse(stored) : []);
+      setItems(loadDemoRequests());
       setLoading(false);
       return;
     }
@@ -79,7 +79,7 @@ export function RequestsTab({ onMessage, onChanged }: { onMessage: (m: string, t
     try {
       if (!supabase) {
         const next = items.map((x) => (x.id === r.id ? { ...x, response: reply.trim() || null, status } : x));
-        localStorage.setItem("committee_requests", JSON.stringify(next));
+        saveDemoRequests(next);
         setItems(next);
       } else {
         const { error } = await supabase

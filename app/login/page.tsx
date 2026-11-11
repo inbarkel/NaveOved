@@ -6,6 +6,8 @@ import { useRouter } from 'next/navigation';
 import { Phone, Mail } from 'lucide-react';
 
 const DEMO_OTP = '123456';
+// Demo mode only (no database): this number signs in as a committee member.
+const DEMO_ADMIN_PHONES = ['0541234567', '541234567'];
 
 export default function LoginPage() {
   const [phone, setPhone] = useState('');
@@ -88,11 +90,12 @@ export default function LoginPage() {
           id: 'demo-user-' + Date.now(),
           email: `phone_${cleanPhone}@local.app`,
           phone: cleanPhone,
-          is_admin: cleanPhone === '5412345678' || cleanPhone === '5423456789' || cleanPhone === '5434567890' || cleanPhone === '5445678901',
+          is_admin: DEMO_ADMIN_PHONES.includes(cleanPhone),
         };
         localStorage.setItem('demo_user', JSON.stringify(demoUser));
         localStorage.setItem('pending_phone', cleanPhone);
-        router.push('/onboarding');
+        // Full navigation so the auth context re-reads the demo user.
+        window.location.href = '/onboarding';
         return;
       }
 
@@ -170,7 +173,9 @@ export default function LoginPage() {
                 className="w-full px-4 py-2 rounded-lg border border-[var(--color-border)] bg-surface text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 disabled:opacity-50"
               />
               <p className="text-xs text-muted-foreground">
-                דוגמה: 050-123-4567 | קוד: 123456
+                {supabase
+                  ? 'דוגמה: 050-123-4567 | קוד: 123456'
+                  : 'מצב הדגמה: כניסה כתושב עם כל מספר, כניסה כאדמין עם 054-123-4567. הקוד תמיד 123456.'}
               </p>
             </div>
           ) : (
