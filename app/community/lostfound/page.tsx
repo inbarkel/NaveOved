@@ -95,7 +95,7 @@ export default function LostFoundPage() {
       </div>
 
       {message && (
-        <div className={`p-3 rounded-lg text-sm ${message.includes("✓") ? "bg-green-100/50 text-green-700" : "bg-red-100/50 text-red-700"}`}>
+        <div className={`p-3 rounded-lg text-sm ${message.includes("✓") ? "bg-secondary/10 text-secondary" : "bg-urgent/10 text-urgent"}`}>
           {message}
         </div>
       )}
@@ -106,7 +106,7 @@ export default function LostFoundPage() {
           return (
             <Card
               key={item.id}
-              className={`p-4 ${item.resolvedAt ? "opacity-60" : ""} ${needsRefresh ? "border-yellow-400 dark:border-yellow-600" : ""}`}
+              className={`p-4 ${item.resolvedAt ? "bg-surface-2" : ""} ${needsRefresh ? "border-accent/60" : ""}`}
             >
               <div className="flex items-start gap-3">
                 <div className="rounded-xl bg-surface-2 p-2 shrink-0">
@@ -119,8 +119,8 @@ export default function LostFoundPage() {
                       <span
                         className={`text-[11px] font-semibold rounded-full px-2 py-0.5 shrink-0 ${
                           item.itemType === "lost"
-                            ? "bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300"
-                            : "bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300"
+                            ? "bg-urgent/10 text-urgent"
+                            : "bg-secondary/10 text-secondary"
                         }`}
                       >
                         {item.itemType === "lost" ? "נאבד" : "נמצא"}
@@ -137,13 +137,13 @@ export default function LostFoundPage() {
               </div>
 
               {needsRefresh && (
-                <div className="mt-3 p-2 bg-yellow-50 dark:bg-yellow-900/20 rounded-lg text-xs text-yellow-800 dark:text-yellow-200">
+                <div className="mt-3 p-2 bg-accent/8 rounded-lg text-xs text-foreground/90">
                   עברו 7 ימים - זה עדיין רלוונטי?
                 </div>
               )}
 
               {item.resolvedAt && (
-                <div className="mt-2 text-xs text-green-700 dark:text-green-300 font-semibold">
+                <div className="mt-2 text-xs text-secondary font-semibold">
                   ✓ סומן כהסתדר - אפשר למחוק
                 </div>
               )}
@@ -153,7 +153,7 @@ export default function LostFoundPage() {
                   onClick={() => toggleResolved(item.id)}
                   className={`flex items-center gap-1 px-3 py-1.5 rounded-lg text-sm font-semibold transition-colors ${
                     item.resolvedAt
-                      ? "bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300"
+                      ? "bg-secondary/10 text-secondary"
                       : "bg-surface-2 text-muted-foreground hover:bg-surface-3"
                   }`}
                 >
@@ -164,7 +164,7 @@ export default function LostFoundPage() {
                 {needsRefresh && (
                   <button
                     onClick={() => renewItem(item.id)}
-                    className="flex items-center gap-1 px-3 py-1.5 rounded-lg text-sm font-semibold bg-primary text-white hover:bg-primary/90 transition-colors"
+                    className="flex items-center gap-1 px-3 py-1.5 rounded-lg text-sm font-semibold bg-primary text-primary-foreground hover:bg-primary/90 transition-colors"
                   >
                     <RotateCcw className="w-4 h-4" />
                     לחדש מודעה
@@ -173,7 +173,7 @@ export default function LostFoundPage() {
 
                 <button
                   onClick={() => deleteItem(item.id)}
-                  className="flex items-center gap-1 px-3 py-1.5 rounded-lg text-sm font-semibold bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300 hover:bg-red-200 dark:hover:bg-red-900/50 transition-colors"
+                  className="flex items-center gap-1 px-3 py-1.5 rounded-lg text-sm font-semibold bg-urgent/10 text-urgent hover:bg-urgent/25 transition-colors"
                 >
                   <Trash2 className="w-4 h-4" />
                   מחק
@@ -207,7 +207,7 @@ export default function LostFoundPage() {
                 onClick={() => setFormData({ ...formData, itemType: "lost" })}
                 className={`py-2 rounded-lg text-sm font-semibold border transition-colors ${
                   formData.itemType === "lost"
-                    ? "bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300 border-red-300 dark:border-red-800"
+                    ? "bg-urgent/10 text-urgent border-urgent/50"
                     : "border-[var(--color-border)] text-muted-foreground"
                 }`}
               >
@@ -218,7 +218,7 @@ export default function LostFoundPage() {
                 onClick={() => setFormData({ ...formData, itemType: "found" })}
                 className={`py-2 rounded-lg text-sm font-semibold border transition-colors ${
                   formData.itemType === "found"
-                    ? "bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300 border-green-300 dark:border-green-800"
+                    ? "bg-secondary/10 text-secondary border-secondary/50"
                     : "border-[var(--color-border)] text-muted-foreground"
                 }`}
               >
@@ -233,7 +233,7 @@ export default function LostFoundPage() {
               value={formData.title}
               onChange={(e) => setFormData({ ...formData, title: e.target.value })}
               placeholder="מה אבד או נמצא?"
-              className="w-full px-3 py-2 rounded-lg border border-[var(--color-border)] bg-background text-sm"
+              className="w-full px-3 py-2 rounded-lg border border-[var(--color-border)] bg-surface text-sm"
             />
           </div>
           <div>
@@ -243,7 +243,7 @@ export default function LostFoundPage() {
               onChange={(e) => setFormData({ ...formData, body: e.target.value })}
               placeholder="היכן, מתי, או פרטים נוספים"
               rows={3}
-              className="w-full px-3 py-2 rounded-lg border border-[var(--color-border)] bg-background text-sm resize-none"
+              className="w-full px-3 py-2 rounded-lg border border-[var(--color-border)] bg-surface text-sm resize-none"
             />
           </div>
           <div>
@@ -253,11 +253,11 @@ export default function LostFoundPage() {
               value={formData.contactPhone}
               onChange={(e) => setFormData({ ...formData, contactPhone: e.target.value })}
               placeholder="050-1234567"
-              className="w-full px-3 py-2 rounded-lg border border-[var(--color-border)] bg-background text-sm"
+              className="w-full px-3 py-2 rounded-lg border border-[var(--color-border)] bg-surface text-sm"
             />
           </div>
           <div className="flex gap-2">
-            <button type="submit" className="flex-1 bg-primary text-white py-2 rounded-lg font-semibold hover:bg-primary/90">
+            <button type="submit" className="flex-1 bg-primary text-primary-foreground py-2 rounded-lg font-semibold hover:bg-primary/90">
               שלח לאישור
             </button>
             <button
@@ -268,7 +268,7 @@ export default function LostFoundPage() {
               ביטול
             </button>
           </div>
-          <p className="text-xs text-muted-foreground text-center">⏳ הדיווח שלך יופיע כאן כשהוועד יאישור</p>
+          <p className="text-xs text-muted-foreground text-center">הדיווח שלך יופיע כאן כשהוועד יאישור</p>
         </form>
       )}
     </div>

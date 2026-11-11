@@ -1,77 +1,99 @@
 @import "tailwindcss";
 
 /*
-  Design tokens — "חם ומקומי": נופי כנרת / הר תבור / פוריה.
-  Light and dark are two value-sets of the same semantic tokens, not a flat invert.
+  מערכת עיצוב: "לוח התורנות של המושב".
+  הזמן במושב הוא רשת של תורות (מים, אשפה, חוגים, שער), וכל הממשק בנוי סביבה:
+  קווים דקים, תאים צבעוניים לפי קטגוריה, מספרים גדולים. הצבע הפעיל היחיד הוא כחול הכנרת.
+  בהיר וכהה הם שתי סדרות ערכים של אותם טוקנים.
 */
 :root {
-  --color-bg: #e8f1e3;
-  --color-surface: #f5f9f3;
-  --color-surface-2: #e0eada;
-  --color-foreground: #1a3a2a;
-  --color-muted-foreground: #5a7563;
-  --color-border: #d0dfc9;
+  --color-bg: #eef2f4;
+  --color-surface: #ffffff;
+  --color-surface-2: #e3eaee;
+  --color-foreground: #0f2433;
+  --color-muted-foreground: #4b6272;
+  --color-border: #cbd6dd;
 
-  --color-primary: #3f5b34;
-  --color-primary-foreground: #faf6ee;
-  --color-secondary: #c97b4a;
-  --color-secondary-foreground: #faf6ee;
-  --color-accent: #c8952e;
-  --color-accent-foreground: #2a271f;
+  --color-primary: #09647f;
+  --color-primary-foreground: #ffffff;
+  --color-secondary: #226a40;
+  --color-secondary-foreground: #ffffff;
+  --color-accent: #a85d12;
+  --color-accent-foreground: #ffffff;
 
-  --color-urgent: #b3452f;
-  --color-urgent-foreground: #fff5f0;
-  --color-success: #3f5b34;
+  --color-urgent: #b02d17;
+  --color-urgent-foreground: #ffffff;
+  --color-success: #226a40;
 
-  --shadow-soft: 0 1px 2px rgba(42, 39, 31, 0.04), 0 8px 24px -8px rgba(42, 39, 31, 0.12);
-  --shadow-lifted: 0 2px 4px rgba(42, 39, 31, 0.06), 0 16px 40px -12px rgba(42, 39, 31, 0.18);
+  /* צבעי התורנות: קטגוריות בתוך הרשת */
+  --rota-water: #09647f;
+  --rota-field: #226a40;
+  --rota-clay: #a85d12;
+  --rota-vermilion: #b02d17;
+  --rota-violet: #6b4fa0;
+  --rota-sky: #2f7fc1;
+
+  --shadow-soft: 0 1px 0 rgba(15, 36, 51, 0.05);
+  --shadow-lifted: 0 1px 2px rgba(15, 36, 51, 0.08), 0 8px 20px -10px rgba(15, 36, 51, 0.28);
 }
 
 :root[data-theme="dark"] {
-  --color-bg: #1a3a2a;
-  --color-surface: #2d4a38;
-  --color-surface-2: #386b4e;
-  --color-foreground: #e8f1e3;
-  --color-muted-foreground: #a8c49d;
-  --color-border: #4a6b57;
+  --color-bg: #0a1822;
+  --color-surface: #112533;
+  --color-surface-2: #1a3345;
+  --color-foreground: #e6eef3;
+  --color-muted-foreground: #9db3c2;
+  --color-border: #27465a;
 
-  --color-primary: #8fb373;
-  --color-primary-foreground: #17160f;
-  --color-secondary: #e0996a;
-  --color-secondary-foreground: #17160f;
-  --color-accent: #e0b654;
-  --color-accent-foreground: #17160f;
+  --color-primary: #4fb8d6;
+  --color-primary-foreground: #06202b;
+  --color-secondary: #5cc08a;
+  --color-secondary-foreground: #06201a;
+  --color-accent: #e0a04a;
+  --color-accent-foreground: #1d1204;
+  --color-urgent: #ff7a5e;
+  --color-urgent-foreground: #240c06;
+  --color-success: #5cc08a;
 
-  --color-urgent: #e2745a;
-  --color-urgent-foreground: #201009;
-  --color-success: #8fb373;
+  --rota-water: #4fb8d6;
+  --rota-field: #5cc08a;
+  --rota-clay: #e0a04a;
+  --rota-vermilion: #ff7a5e;
+  --rota-violet: #a58be0;
+  --rota-sky: #6fb0ea;
 
-  --shadow-soft: 0 1px 2px rgba(0, 0, 0, 0.24), 0 8px 24px -8px rgba(0, 0, 0, 0.5);
-  --shadow-lifted: 0 2px 4px rgba(0, 0, 0, 0.3), 0 16px 40px -12px rgba(0, 0, 0, 0.6);
+  --shadow-soft: 0 1px 0 rgba(0, 0, 0, 0.3);
+  --shadow-lifted: 0 1px 2px rgba(0, 0, 0, 0.4), 0 10px 24px -10px rgba(0, 0, 0, 0.7);
 }
 
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
-    --color-bg: #1a3a2a;
-    --color-surface: #2d4a38;
-    --color-surface-2: #386b4e;
-    --color-foreground: #e8f1e3;
-    --color-muted-foreground: #a8c49d;
-    --color-border: #4a6b57;
+    --color-bg: #0a1822;
+    --color-surface: #112533;
+    --color-surface-2: #1a3345;
+    --color-foreground: #e6eef3;
+    --color-muted-foreground: #9db3c2;
+    --color-border: #27465a;
 
-    --color-primary: #8fb373;
-    --color-primary-foreground: #17160f;
-    --color-secondary: #e0996a;
-    --color-secondary-foreground: #17160f;
-    --color-accent: #e0b654;
-    --color-accent-foreground: #17160f;
+    --color-primary: #4fb8d6;
+    --color-primary-foreground: #06202b;
+    --color-secondary: #5cc08a;
+    --color-secondary-foreground: #06201a;
+    --color-accent: #e0a04a;
+    --color-accent-foreground: #1d1204;
+    --color-urgent: #ff7a5e;
+    --color-urgent-foreground: #240c06;
+    --color-success: #5cc08a;
 
-    --color-urgent: #e2745a;
-    --color-urgent-foreground: #201009;
-    --color-success: #8fb373;
+    --rota-water: #4fb8d6;
+    --rota-field: #5cc08a;
+    --rota-clay: #e0a04a;
+    --rota-vermilion: #ff7a5e;
+    --rota-violet: #a58be0;
+    --rota-sky: #6fb0ea;
 
-    --shadow-soft: 0 1px 2px rgba(0, 0, 0, 0.24), 0 8px 24px -8px rgba(0, 0, 0, 0.5);
-    --shadow-lifted: 0 2px 4px rgba(0, 0, 0, 0.3), 0 16px 40px -12px rgba(0, 0, 0, 0.6);
+    --shadow-soft: 0 1px 0 rgba(0, 0, 0, 0.3);
+    --shadow-lifted: 0 1px 2px rgba(0, 0, 0, 0.4), 0 10px 24px -10px rgba(0, 0, 0, 0.7);
   }
 }
 
@@ -93,7 +115,22 @@
   --color-urgent-foreground: var(--color-urgent-foreground);
   --color-success: var(--color-success);
 
+  --color-rota-water: var(--rota-water);
+  --color-rota-field: var(--rota-field);
+  --color-rota-clay: var(--rota-clay);
+  --color-rota-vermilion: var(--rota-vermilion);
+  --color-rota-violet: var(--rota-violet);
+  --color-rota-sky: var(--rota-sky);
+
   --font-sans: var(--font-body);
+}
+
+/* פינות חדות יחסית: הרשת היא הדמות, לא העיגולים */
+@theme {
+  --radius-lg: 0.375rem;
+  --radius-xl: 0.4375rem;
+  --radius-2xl: 0.5rem;
+  --radius-3xl: 0.625rem;
 }
 
 html {
@@ -104,22 +141,131 @@ html[data-theme="dark"] {
 }
 
 body {
-  background: linear-gradient(135deg, var(--color-bg) 0%, rgba(212, 232, 207, 0.3) 100%),
-              linear-gradient(45deg, transparent 30%, rgba(63, 91, 52, 0.03) 70%),
-              var(--color-bg);
+  background:
+    radial-gradient(1100px 520px at 88% -140px, color-mix(in srgb, var(--color-primary) 14%, transparent), transparent 72%),
+    radial-gradient(800px 420px at 4% 105%, color-mix(in srgb, var(--color-secondary) 9%, transparent), transparent 70%),
+    var(--color-bg);
   background-attachment: fixed;
   color: var(--color-foreground);
   font-family: var(--font-body), system-ui, sans-serif;
+  font-variant-numeric: tabular-nums;
   transition: background-color 0.2s ease, color 0.2s ease;
 }
 
 /* כל הטקסט כולל כותרות משתמש ב-Heebo */
+p {
+  text-wrap: pretty;
+}
+
 h1, h2, h3 {
   font-family: var(--font-body), sans-serif;
+  letter-spacing: -0.01em;
+  text-wrap: balance;
 }
 
 button, input, select, textarea {
   font-family: inherit;
+}
+
+::selection {
+  background: color-mix(in srgb, var(--color-primary) 28%, transparent);
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-border) transparent;
+}
+
+/*
+  רקע: קווי גובה של בקעת הירדן, כמו על מפת סקר.
+  דקים, בצבע הראשי, זזים לאט מאוד. נעלמים בניגודיות גבוהה ובהעדפת "פחות תנועה".
+*/
+body::before {
+  content: "";
+  position: fixed;
+  inset: -40px;
+  z-index: -1;
+  pointer-events: none;
+  background-color: var(--color-primary);
+  opacity: 0.1;
+  -webkit-mask-image: url("/images/contours.svg");
+  mask-image: url("/images/contours.svg");
+  -webkit-mask-size: cover;
+  mask-size: cover;
+  -webkit-mask-position: center;
+  mask-position: center;
+  animation: contour-drift 90s ease-in-out infinite alternate;
+}
+:root[data-theme="dark"] body::before {
+  opacity: 0.16;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) body::before {
+    opacity: 0.16;
+  }
+}
+@keyframes contour-drift {
+  from { transform: translate3d(0, 0, 0) scale(1.02); }
+  to   { transform: translate3d(-28px, 18px, 0) scale(1.06); }
+}
+html[data-a11y-contrast="true"] body::before {
+  display: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  body::before { animation: none; }
+}
+
+/*
+  תנועה: עקומת ease-out חזקה, משכים קצרים (עד 300ms), משוב בלחיצה.
+  רק transform, opacity וצבע. אין transition: all.
+*/
+:root {
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+button:not(:disabled),
+[role="tab"],
+a.press {
+  transition:
+    transform 160ms var(--ease-out),
+    background-color 160ms ease,
+    border-color 160ms ease,
+    color 160ms ease,
+    opacity 160ms ease;
+}
+button:not(:disabled):active,
+a.press:active {
+  transform: scale(0.97);
+}
+
+/* כניסה מדורגת של בלוקים בדף: פעם אחת בטעינה, 55ms בין בלוק לבלוק */
+.rise {
+  animation: rise 380ms var(--ease-out) both;
+  animation-delay: calc(var(--i, 0) * 55ms);
+}
+@keyframes rise {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* החלפת תוכן בתוך לוח (למשל בחירת יום) */
+.swap {
+  animation: swap 180ms var(--ease-out) both;
+}
+@keyframes swap {
+  from { opacity: 0; transform: translateY(4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* תא בתוך רשת התורנות */
+.rota-cell {
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
 }
 
 /* נגישות: טקסט גדול */

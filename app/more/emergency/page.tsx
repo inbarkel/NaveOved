@@ -4,9 +4,9 @@ import { ChevronRight, AlertCircle, Phone } from "lucide-react";
 export default function EmergencyPage() {
   const emergencyNumbers = [
     // משדרות
-    { name: "משטרה", phone: "100", icon: "🚨", group: "משדרות" },
-    { name: "אמבולנס", phone: "101", icon: "🚑", group: "משדרות" },
-    { name: "מכבי אש", phone: "102", icon: "🚒", group: "משדרות" },
+    { name: "משטרה", phone: "100", icon: "🚨", group: "חירום כללי" },
+    { name: "אמבולנס", phone: "101", icon: "🚑", group: "חירום כללי" },
+    { name: "מכבי אש", phone: "102", icon: "🚒", group: "חירום כללי" },
     // בית חולים
     { name: "דלפק קבלה (מיון כללי)", phone: "04-6652886", icon: "🏥", group: "בית חולים צפון (פוריה)" },
     { name: "דלפק קבלה (חלופי)", phone: "04-6652889", icon: "🏥", group: "בית חולים צפון (פוריה)" },
@@ -29,11 +29,11 @@ export default function EmergencyPage() {
         חזרה
       </Link>
 
-      <div className="bg-urgent/20 border border-urgent rounded-2xl p-4 flex gap-3">
+      <div className="bg-urgent/10 border border-urgent rounded-2xl p-4 flex gap-3">
         <AlertCircle className="w-6 h-6 text-urgent shrink-0" />
         <div>
           <p className="font-bold text-urgent">חיוני: מספרי חירום</p>
-          <p className="text-sm text-urgent/80 mt-1">לחץ על כל מספר להתקשר מיד</p>
+          <p className="text-sm text-foreground/80 mt-1">לחץ על כל מספר להתקשר מיד</p>
         </div>
       </div>
 
@@ -49,7 +49,6 @@ export default function EmergencyPage() {
                   className="block p-4 rounded-xl bg-surface-2 hover:bg-surface-2/80 active:scale-[0.97] transition-transform border border-[var(--color-border)] flex items-center justify-between"
                 >
                   <div className="flex items-center gap-3 min-w-0">
-                    <span className="text-2xl shrink-0">{emergency.icon}</span>
                     <div className="min-w-0">
                       <p className="font-semibold text-sm">{emergency.name}</p>
                       <p className="text-lg font-mono font-bold text-primary">{emergency.phone}</p>
@@ -64,9 +63,9 @@ export default function EmergencyPage() {
       </div>
 
       <div className="bg-surface-2 rounded-2xl p-4 space-y-2 text-sm">
-        <p className="font-bold">💡 זכור:</p>
+        <p className="font-bold">שימו לב:</p>
         <ul className="list-disc list-inside space-y-1 text-muted-foreground">
-          <li>המספרים 100, 101, 102 עובדים מכל טלפון ללא צורך בקידומת</li>
+          <li>100, 101 ו-102 עובדים מכל טלפון, גם בלי קידומת</li>
           <li>בית חולים צפון הוא הבית החולים הקרוב ביותר למושב</li>
           <li>קב״ט המועצה עוזר בתקלות ביטחוניות ובעיות מנהליות</li>
         </ul>

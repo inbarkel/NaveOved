@@ -73,7 +73,7 @@ export default function IdeasPage() {
       </div>
 
       {message && (
-        <div className={`p-3 rounded-lg text-sm ${message.includes("✓") ? "bg-green-100/50 text-green-700" : "bg-red-100/50 text-red-700"}`}>
+        <div className={`p-3 rounded-lg text-sm ${message.includes("✓") ? "bg-secondary/10 text-secondary" : "bg-urgent/10 text-urgent"}`}>
           {message}
         </div>
       )}
@@ -92,7 +92,7 @@ export default function IdeasPage() {
                   onClick={() => toggleVote(idea.id)}
                   className={`flex items-center gap-1 mt-3 px-3 py-1.5 rounded-full text-sm font-semibold transition-colors ${
                     votes[idea.id]
-                      ? "bg-primary text-white"
+                      ? "bg-primary text-primary-foreground"
                       : "bg-surface-2 text-muted-foreground hover:bg-surface-2/80"
                   }`}
                 >
@@ -124,7 +124,7 @@ export default function IdeasPage() {
               value={formData.title}
               onChange={(e) => setFormData({ ...formData, title: e.target.value })}
               placeholder="למשל: אזור צל בגן"
-              className="w-full px-3 py-2 rounded-lg border border-[var(--color-border)] bg-background text-sm"
+              className="w-full px-3 py-2 rounded-lg border border-[var(--color-border)] bg-surface text-sm"
             />
           </div>
           <div>
@@ -134,11 +134,11 @@ export default function IdeasPage() {
               onChange={(e) => setFormData({ ...formData, description: e.target.value })}
               placeholder="למה זה חשוב?"
               rows={3}
-              className="w-full px-3 py-2 rounded-lg border border-[var(--color-border)] bg-background text-sm resize-none"
+              className="w-full px-3 py-2 rounded-lg border border-[var(--color-border)] bg-surface text-sm resize-none"
             />
           </div>
           <div className="flex gap-2">
-            <button type="submit" className="flex-1 bg-primary text-white py-2 rounded-lg font-semibold hover:bg-primary/90">
+            <button type="submit" className="flex-1 bg-primary text-primary-foreground py-2 rounded-lg font-semibold hover:bg-primary/90">
               שלח לאישור
             </button>
             <button
@@ -149,7 +149,7 @@ export default function IdeasPage() {
               ביטול
             </button>
           </div>
-          <p className="text-xs text-muted-foreground text-center">⏳ הרעיון שלך יופיע כאן כשהוועד יאישור</p>
+          <p className="text-xs text-muted-foreground text-center">הרעיון שלך יופיע כאן כשהוועד יאישור</p>
         </form>
       )}
     </div>

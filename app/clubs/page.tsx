@@ -119,12 +119,12 @@ export default function ClubsPage() {
                         <div className="flex items-center gap-2 flex-wrap">
                           <p className="font-sans font-bold">{event.title}</p>
                           {event.status === "cancelled" && (
-                            <span className="text-[11px] font-semibold rounded-full bg-red-100 dark:bg-red-900/30 px-2 py-0.5 text-red-700 dark:text-red-300">
+                            <span className="text-[11px] font-semibold rounded-full bg-urgent/10 px-2 py-0.5 text-urgent">
                               בוטל
                             </span>
                           )}
                           {event.status === "postponed" && (
-                            <span className="text-[11px] font-semibold rounded-full bg-green-100 dark:bg-green-900/30 px-2 py-0.5 text-green-700 dark:text-green-300">
+                            <span className="text-[11px] font-semibold rounded-full bg-secondary/10 px-2 py-0.5 text-secondary">
                               נדחה
                               {event.rescheduledTo && (
                                 <>
@@ -152,7 +152,7 @@ export default function ClubsPage() {
                             {event.daysOfWeek.join(", ")} · {event.time}
                           </span>
                           {event.startDate && event.endDate && (
-                            <span className="flex items-center gap-1 text-[10px]">
+                            <span className="flex items-center gap-1 text-[11px]">
                               {new Date(event.startDate).toLocaleDateString("he-IL", {
                                 month: "short",
                                 day: "numeric",
@@ -195,7 +195,7 @@ export default function ClubsPage() {
                 ) : (
                   <Link
                     href={`/clubs/${event.id}`}
-                    className="block w-full text-center bg-primary text-white py-2 rounded-lg font-semibold hover:bg-primary/90 active:scale-[0.99] transition-colors"
+                    className="block w-full text-center bg-primary text-primary-foreground py-2 rounded-lg font-semibold hover:bg-primary/90 active:scale-[0.99] transition-colors"
                   >
                     להירשם
                   </Link>

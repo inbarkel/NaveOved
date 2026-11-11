@@ -153,7 +153,7 @@ export default function LoginPage() {
         {/* Form */}
         <form onSubmit={isOtpSent ? verifyOtp : sendOtp} className="space-y-4">
           {error && (
-            <div className="bg-urgent/20 border border-urgent text-urgent rounded-lg p-3 text-sm">
+            <div className="bg-urgent/10 border border-urgent text-urgent rounded-lg p-3 text-sm">
               {error}
             </div>
           )}
@@ -170,7 +170,7 @@ export default function LoginPage() {
                 className="w-full px-4 py-2 rounded-lg border border-[var(--color-border)] bg-surface text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 disabled:opacity-50"
               />
               <p className="text-xs text-muted-foreground">
-                🔧 דוגמה: 050-123-4567 | קוד: 123456
+                דוגמה: 050-123-4567 | קוד: 123456
               </p>
             </div>
           ) : (
@@ -191,7 +191,7 @@ export default function LoginPage() {
           <button
             type="submit"
             disabled={isLoading}
-            className="w-full bg-primary text-white py-2.5 rounded-lg font-semibold hover:bg-primary/90 disabled:opacity-50 transition-colors"
+            className="w-full bg-primary text-primary-foreground py-2.5 rounded-lg font-semibold hover:bg-primary/90 disabled:opacity-50 transition-colors"
           >
             {isLoading ? 'טוען...' : isOtpSent ? 'אימות' : 'שלח קוד'}
           </button>

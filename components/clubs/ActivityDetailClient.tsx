@@ -141,14 +141,14 @@ export function ActivityDetailClient({
           <div className="flex gap-2">
             <button
               onClick={openEditForm}
-              className="flex items-center gap-2 px-3 py-2 bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 rounded-lg hover:bg-blue-200 dark:hover:bg-blue-900/50 text-sm font-semibold transition-colors"
+              className="flex items-center gap-2 px-3 py-2 bg-primary/10 text-primary rounded-lg hover:bg-primary/25 text-sm font-semibold transition-colors"
             >
               <Edit2 className="w-4 h-4" />
               עריכה
             </button>
             <button
               onClick={() => setShowDeleteConfirm(true)}
-              className="flex items-center gap-2 px-3 py-2 bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300 rounded-lg hover:bg-red-200 dark:hover:bg-red-900/50 text-sm font-semibold transition-colors"
+              className="flex items-center gap-2 px-3 py-2 bg-urgent/10 text-urgent rounded-lg hover:bg-urgent/25 text-sm font-semibold transition-colors"
             >
               <Trash2 className="w-4 h-4" />
               מחיקה
@@ -163,7 +163,7 @@ export function ActivityDetailClient({
               {event.kind}
             </span>
             {event.isExternal && (
-              <span className="text-[11px] font-semibold rounded-full bg-amber-100 dark:bg-amber-900/30 px-2 py-0.5 text-amber-700 dark:text-amber-300">
+              <span className="text-[11px] font-semibold rounded-full bg-accent/10 px-2 py-0.5 text-accent">
                 מחוץ למושב
               </span>
             )}
@@ -246,7 +246,7 @@ export function ActivityDetailClient({
                   type="text"
                   value={form.title || ''}
                   onChange={(e) => setForm({ ...form, title: e.target.value })}
-                  className="w-full px-3 py-2 rounded-lg border border-[var(--color-border)] bg-background text-sm"
+                  className="w-full px-3 py-2 rounded-lg border border-[var(--color-border)] bg-surface text-sm"
                 />
               </div>
               <div>
@@ -255,7 +255,7 @@ export function ActivityDetailClient({
                   value={form.description || ''}
                   onChange={(e) => setForm({ ...form, description: e.target.value })}
                   rows={3}
-                  className="w-full px-3 py-2 rounded-lg border border-[var(--color-border)] bg-background text-sm resize-none"
+                  className="w-full px-3 py-2 rounded-lg border border-[var(--color-border)] bg-surface text-sm resize-none"
                 />
               </div>
               <div>
@@ -265,7 +265,7 @@ export function ActivityDetailClient({
                   value={form.image || ''}
                   onChange={(e) => setForm({ ...form, image: e.target.value })}
                   placeholder="https://..."
-                  className="w-full px-3 py-2 rounded-lg border border-[var(--color-border)] bg-background text-sm"
+                  className="w-full px-3 py-2 rounded-lg border border-[var(--color-border)] bg-surface text-sm"
                   dir="ltr"
                 />
                 {form.image && (
@@ -280,7 +280,7 @@ export function ActivityDetailClient({
                   type="text"
                   value={form.time || ''}
                   onChange={(e) => setForm({ ...form, time: e.target.value })}
-                  className="w-full px-3 py-2 rounded-lg border border-[var(--color-border)] bg-background text-sm"
+                  className="w-full px-3 py-2 rounded-lg border border-[var(--color-border)] bg-surface text-sm"
                 />
               </div>
               <div>
@@ -289,7 +289,7 @@ export function ActivityDetailClient({
                   type="text"
                   value={form.location || ''}
                   onChange={(e) => setForm({ ...form, location: e.target.value })}
-                  className="w-full px-3 py-2 rounded-lg border border-[var(--color-border)] bg-background text-sm"
+                  className="w-full px-3 py-2 rounded-lg border border-[var(--color-border)] bg-surface text-sm"
                 />
               </div>
               <div>
@@ -299,7 +299,7 @@ export function ActivityDetailClient({
                   value={form.price || ''}
                   onChange={(e) => setForm({ ...form, price: e.target.value })}
                   placeholder='לדוגמה: "כניסה חופשית" או "80 ₪ לחודש"'
-                  className="w-full px-3 py-2 rounded-lg border border-[var(--color-border)] bg-background text-sm"
+                  className="w-full px-3 py-2 rounded-lg border border-[var(--color-border)] bg-surface text-sm"
                 />
               </div>
               <div>
@@ -309,7 +309,7 @@ export function ActivityDetailClient({
                     type="button"
                     onClick={() => setUseCustomDeadline(false)}
                     className={`flex-1 py-2 rounded-lg text-sm font-semibold border transition-colors ${
-                      !useCustomDeadline ? 'bg-primary text-white border-primary' : 'border-[var(--color-border)] text-muted-foreground'
+                      !useCustomDeadline ? 'bg-primary text-primary-foreground border-primary' : 'border-[var(--color-border)] text-muted-foreground'
                     }`}
                   >
                     יום הפעילות (ברירת מחדל)
@@ -318,7 +318,7 @@ export function ActivityDetailClient({
                     type="button"
                     onClick={() => setUseCustomDeadline(true)}
                     className={`flex-1 py-2 rounded-lg text-sm font-semibold border transition-colors ${
-                      useCustomDeadline ? 'bg-primary text-white border-primary' : 'border-[var(--color-border)] text-muted-foreground'
+                      useCustomDeadline ? 'bg-primary text-primary-foreground border-primary' : 'border-[var(--color-border)] text-muted-foreground'
                     }`}
                   >
                     תאריך מותאם
@@ -329,7 +329,7 @@ export function ActivityDetailClient({
                     type="date"
                     value={form.registrationDeadline?.slice(0, 10) || ''}
                     onChange={(e) => setForm({ ...form, registrationDeadline: e.target.value })}
-                    className="w-full px-3 py-2 rounded-lg border border-[var(--color-border)] bg-background text-sm"
+                    className="w-full px-3 py-2 rounded-lg border border-[var(--color-border)] bg-surface text-sm"
                   />
                 )}
               </div>
@@ -339,7 +339,7 @@ export function ActivityDetailClient({
                   type="text"
                   value={form.instructorName || ''}
                   onChange={(e) => setForm({ ...form, instructorName: e.target.value })}
-                  className="w-full px-3 py-2 rounded-lg border border-[var(--color-border)] bg-background text-sm"
+                  className="w-full px-3 py-2 rounded-lg border border-[var(--color-border)] bg-surface text-sm"
                 />
               </div>
               <div>
@@ -348,14 +348,14 @@ export function ActivityDetailClient({
                   type="text"
                   value={form.instructorPhone || ''}
                   onChange={(e) => setForm({ ...form, instructorPhone: e.target.value })}
-                  className="w-full px-3 py-2 rounded-lg border border-[var(--color-border)] bg-background text-sm"
+                  className="w-full px-3 py-2 rounded-lg border border-[var(--color-border)] bg-surface text-sm"
                 />
               </div>
             </div>
 
             <button
               onClick={handleSaveEdit}
-              className="w-full bg-primary text-white py-3 rounded-lg font-semibold hover:bg-primary/90 active:scale-[0.99] transition-colors"
+              className="w-full bg-primary text-primary-foreground py-3 rounded-lg font-semibold hover:bg-primary/90 active:scale-[0.99] transition-colors"
             >
               שמירה
             </button>
@@ -379,7 +379,7 @@ export function ActivityDetailClient({
               </button>
               <button
                 onClick={handleDelete}
-                className="flex-1 py-2.5 rounded-lg font-semibold bg-red-600 text-white hover:bg-red-700 transition-colors"
+                className="flex-1 py-2.5 rounded-lg font-semibold bg-urgent text-urgent-foreground hover:opacity-90 transition-colors"
               >
                 מחיקה
               </button>

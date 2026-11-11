@@ -25,8 +25,8 @@ export const metadata: Metadata = {
 
 export const viewport: Viewport = {
   themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#e8f1e3" },
-    { media: "(prefers-color-scheme: dark)", color: "#1a3a2a" },
+    { media: "(prefers-color-scheme: light)", color: "#eef2f4" },
+    { media: "(prefers-color-scheme: dark)", color: "#0a1822" },
   ],
 };
 
@@ -45,8 +45,19 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
                     <main className="flex-1 pb-20 md:pb-0">{children}</main>
                   </div>
                 </div>
-                <footer className="bg-surface/50 border-t border-[var(--color-border)] text-center py-3 pb-20 md:pb-3 text-xs text-muted-foreground">
-                  <p>© 2026 ענבר קלר. כל הזכויות שמורות.</p>
+                <footer className="bg-surface border-t border-[var(--color-border)] text-center py-3 pb-20 md:pb-3 text-xs text-muted-foreground">
+                  <p>
+                    © 2026{" "}
+                    <a
+                      href="https://bizfix.co.il"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="font-semibold text-primary underline-offset-4 hover:underline"
+                    >
+                      ענבר קלר
+                    </a>
+                    . כל הזכויות שמורות.
+                  </p>
                 </footer>
               </div>
               <BottomNav />

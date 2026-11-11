@@ -25,8 +25,8 @@ const STATUS_LABELS: Record<CommitteeRequest["status"], string> = {
 
 const STATUS_STYLES: Record<CommitteeRequest["status"], string> = {
   open: "bg-surface-2 text-muted-foreground",
-  in_progress: "bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-300",
-  resolved: "bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300",
+  in_progress: "bg-accent/10 text-accent",
+  resolved: "bg-secondary/10 text-secondary",
 };
 
 export default function CommitteeRequestsPage() {
@@ -75,7 +75,7 @@ export default function CommitteeRequestsPage() {
     e.preventDefault();
     if (!user) return;
     if (!subject.trim() || !message.trim()) {
-      setFeedback("❌ נא למלא נושא ותוכן");
+      setFeedback("נא למלא נושא ותוכן");
       return;
     }
 
@@ -112,7 +112,7 @@ export default function CommitteeRequestsPage() {
       setTimeout(() => setFeedback(""), 3000);
     } catch (err) {
       console.error("Error sending request:", err);
-      setFeedback("❌ שגיאה בשליחת הפנייה");
+      setFeedback("שגיאה בשליחת הפנייה");
     } finally {
       setIsSending(false);
     }
@@ -139,7 +139,7 @@ export default function CommitteeRequestsPage() {
 
       <Card className="p-4 space-y-3">
         {feedback && (
-          <div className={`p-3 rounded-lg text-sm ${feedback.includes("✓") ? "bg-green-500/20 text-green-700" : "bg-red-500/20 text-red-700"}`}>
+          <div className={`p-3 rounded-lg text-sm ${feedback.includes("✓") ? "bg-secondary/10 text-secondary" : "bg-urgent/10 text-urgent"}`}>
             {feedback}
           </div>
         )}
@@ -167,7 +167,7 @@ export default function CommitteeRequestsPage() {
           <button
             type="submit"
             disabled={isSending}
-            className="w-full flex items-center justify-center gap-2 bg-primary text-white py-2.5 rounded-lg font-semibold hover:bg-primary/90 disabled:opacity-50 transition-colors"
+            className="w-full flex items-center justify-center gap-2 bg-primary text-primary-foreground py-2.5 rounded-lg font-semibold hover:bg-primary/90 disabled:opacity-50 transition-colors"
           >
             <Send className="w-4 h-4" aria-hidden />
             {isSending ? "שולח..." : "שליחה לוועד"}

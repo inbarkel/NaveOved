@@ -2,26 +2,36 @@ import Link from "next/link";
 import { QUICK_ACTIONS } from "@/lib/demo-data";
 import { getIcon } from "@/lib/icons";
 
+const TONES: Record<string, string> = {
+  "מספרי טלפון": "var(--rota-water)",
+  חירום: "var(--rota-vermilion)",
+  וואטסאפ: "var(--rota-field)",
+  "הצעות והצבעות": "var(--rota-violet)",
+};
+
 export function QuickActions() {
   return (
-    <div className="grid grid-cols-2 gap-3">
+    <div className="grid grid-cols-2 gap-2.5">
       {QUICK_ACTIONS.map((action) => {
         const Icon = getIcon(action.iconKey);
+        const tone = TONES[action.label] ?? "var(--rota-water)";
         const isEmergency = action.label === "חירום";
-        const baseClass = "contrast-surface flex flex-col items-center gap-1.5 rounded-2xl py-3 shadow-[var(--shadow-soft)] active:scale-[0.97] transition-transform";
-        const emergencyClass = isEmergency
-          ? "bg-urgent/20 border border-urgent text-urgent"
-          : "border border-[var(--color-border)] bg-surface text-primary";
-
         return (
-          <a
+          <Link
             key={action.label}
             href={action.href}
-            className={`${baseClass} ${emergencyClass}`}
+            className={`press contrast-surface flex min-h-[56px] items-center gap-3 rounded-2xl border bg-surface px-3 py-2.5 hover:bg-surface-2 ${
+              isEmergency ? "border-urgent" : "border-[var(--color-border)]"
+            }`}
           >
-            <Icon className={`w-5 h-5 ${isEmergency ? 'text-urgent' : 'text-primary'}`} aria-hidden />
-            <span className="text-xs font-semibold">{action.label}</span>
-          </a>
+            <span
+              className="grid h-10 w-10 shrink-0 place-items-center rounded-xl"
+              style={{ background: `color-mix(in srgb, ${tone} 16%, transparent)`, color: tone }}
+            >
+              <Icon className="h-5 w-5" aria-hidden />
+            </span>
+            <span className={`text-sm font-bold leading-tight ${isEmergency ? "text-urgent" : ""}`}>{action.label}</span>
+          </Link>
         );
       })}
     </div>

@@ -47,7 +47,7 @@ export function GallerySection() {
       </div>
 
       {message && (
-        <div className={`p-3 rounded-lg text-sm ${message.includes("✓") ? "bg-green-100/50 text-green-700" : "bg-red-100/50 text-red-700"}`}>
+        <div className={`p-3 rounded-lg text-sm ${message.includes("✓") ? "bg-secondary/10 text-secondary" : "bg-urgent/10 text-urgent"}`}>
           {message}
         </div>
       )}
@@ -82,7 +82,7 @@ export function GallerySection() {
               value={formData.title}
               onChange={(e) => setFormData({ ...formData, title: e.target.value })}
               placeholder="למשל: ערב קיץ קהילתי"
-              className="w-full px-3 py-2 rounded-lg border border-[var(--color-border)] bg-background text-sm"
+              className="w-full px-3 py-2 rounded-lg border border-[var(--color-border)] bg-surface text-sm"
             />
           </div>
           <div>
@@ -91,12 +91,12 @@ export function GallerySection() {
               type="file"
               accept="image/*"
               onChange={(e) => setFormData({ ...formData, file: e.target.files?.[0] || null })}
-              className="w-full px-3 py-2 rounded-lg border border-[var(--color-border)] bg-background text-sm"
+              className="w-full px-3 py-2 rounded-lg border border-[var(--color-border)] bg-surface text-sm"
             />
             {formData.file && <p className="text-xs text-muted-foreground mt-1">✓ {formData.file.name}</p>}
           </div>
           <div className="flex gap-2">
-            <button type="submit" className="flex-1 bg-primary text-white py-2 rounded-lg font-semibold hover:bg-primary/90">
+            <button type="submit" className="flex-1 bg-primary text-primary-foreground py-2 rounded-lg font-semibold hover:bg-primary/90">
               הוספה
             </button>
             <button

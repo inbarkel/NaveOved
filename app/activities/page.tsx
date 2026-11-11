@@ -221,7 +221,7 @@ export default function ActivitiesPage() {
             return (
               <div key={event.id} className="space-y-2">
                 <Link href={`/activities/${event.id}`} className="block">
-                  <Card className={`p-4 active:scale-[0.99] transition-transform ${isCancelled ? "bg-surface-2/60 opacity-75" : ""}`}>
+                  <Card className={`p-4 active:scale-[0.99] transition-transform ${isCancelled ? "bg-surface-2" : ""}`}>
                     <div className="flex items-start gap-3">
                       <div className="rounded-xl bg-surface-2 p-2.5 shrink-0">
                         <Icon className="w-6 h-6 text-primary" aria-hidden />
@@ -230,12 +230,12 @@ export default function ActivitiesPage() {
                         <div className="flex items-center gap-2 flex-wrap">
                           <p className={`font-sans font-bold ${isCancelled ? "line-through text-muted-foreground" : ""}`}>{event.title}</p>
                           {event.status === "cancelled" && (
-                            <span className="text-[11px] font-semibold rounded-full bg-red-100 dark:bg-red-900/30 px-2 py-0.5 text-red-700 dark:text-red-300">
+                            <span className="text-[11px] font-semibold rounded-full bg-urgent/10 px-2 py-0.5 text-urgent">
                               בוטל
                             </span>
                           )}
                           {event.status === "postponed" && (
-                            <span className="text-[11px] font-semibold rounded-full bg-green-100 dark:bg-green-900/30 px-2 py-0.5 text-green-700 dark:text-green-300">
+                            <span className="text-[11px] font-semibold rounded-full bg-secondary/10 px-2 py-0.5 text-secondary">
                               נדחה
                               {event.rescheduledTo && (
                                 <>
@@ -305,7 +305,7 @@ export default function ActivitiesPage() {
                   ) : (
                     <Link
                       href={`/activities/${event.id}`}
-                      className="block w-full text-center bg-primary text-white py-2 rounded-lg font-semibold hover:bg-primary/90 active:scale-[0.99] transition-colors"
+                      className="block w-full text-center bg-primary text-primary-foreground py-2 rounded-lg font-semibold hover:bg-primary/90 active:scale-[0.99] transition-colors"
                     >
                       להירשם
                     </Link>
@@ -349,7 +349,7 @@ export default function ActivitiesPage() {
                   type="text"
                   value={newActivity.title}
                   onChange={(e) => setNewActivity({ ...newActivity, title: e.target.value })}
-                  className="w-full px-3 py-2 rounded-lg border border-[var(--color-border)] bg-background text-sm"
+                  className="w-full px-3 py-2 rounded-lg border border-[var(--color-border)] bg-surface text-sm"
                 />
               </div>
               <div>
@@ -358,7 +358,7 @@ export default function ActivitiesPage() {
                   value={newActivity.description}
                   onChange={(e) => setNewActivity({ ...newActivity, description: e.target.value })}
                   rows={3}
-                  className="w-full px-3 py-2 rounded-lg border border-[var(--color-border)] bg-background text-sm resize-none"
+                  className="w-full px-3 py-2 rounded-lg border border-[var(--color-border)] bg-surface text-sm resize-none"
                 />
               </div>
               <div>
@@ -367,7 +367,7 @@ export default function ActivitiesPage() {
                   type="datetime-local"
                   value={newActivity.eventDateStr}
                   onChange={(e) => setNewActivity({ ...newActivity, eventDateStr: e.target.value })}
-                  className="w-full px-3 py-2 rounded-lg border border-[var(--color-border)] bg-background text-sm"
+                  className="w-full px-3 py-2 rounded-lg border border-[var(--color-border)] bg-surface text-sm"
                 />
               </div>
               <div>
@@ -376,7 +376,7 @@ export default function ActivitiesPage() {
                   type="text"
                   value={newActivity.location}
                   onChange={(e) => setNewActivity({ ...newActivity, location: e.target.value })}
-                  className="w-full px-3 py-2 rounded-lg border border-[var(--color-border)] bg-background text-sm"
+                  className="w-full px-3 py-2 rounded-lg border border-[var(--color-border)] bg-surface text-sm"
                 />
               </div>
               <div>
@@ -386,7 +386,7 @@ export default function ActivitiesPage() {
                   value={newActivity.price}
                   onChange={(e) => setNewActivity({ ...newActivity, price: e.target.value })}
                   placeholder='לדוגמה: "כניסה חופשית" או "50 ₪ לאדם"'
-                  className="w-full px-3 py-2 rounded-lg border border-[var(--color-border)] bg-background text-sm"
+                  className="w-full px-3 py-2 rounded-lg border border-[var(--color-border)] bg-surface text-sm"
                 />
               </div>
               <div>
@@ -395,7 +395,7 @@ export default function ActivitiesPage() {
                   type="text"
                   value={newActivity.instructorName}
                   onChange={(e) => setNewActivity({ ...newActivity, instructorName: e.target.value })}
-                  className="w-full px-3 py-2 rounded-lg border border-[var(--color-border)] bg-background text-sm"
+                  className="w-full px-3 py-2 rounded-lg border border-[var(--color-border)] bg-surface text-sm"
                 />
               </div>
               <div>
@@ -404,14 +404,14 @@ export default function ActivitiesPage() {
                   type="text"
                   value={newActivity.instructorPhone}
                   onChange={(e) => setNewActivity({ ...newActivity, instructorPhone: e.target.value })}
-                  className="w-full px-3 py-2 rounded-lg border border-[var(--color-border)] bg-background text-sm"
+                  className="w-full px-3 py-2 rounded-lg border border-[var(--color-border)] bg-surface text-sm"
                 />
               </div>
             </div>
 
             <button
               onClick={handleCreateExternalActivity}
-              className="w-full bg-primary text-white py-3 rounded-lg font-semibold hover:bg-primary/90 active:scale-[0.99] transition-colors"
+              className="w-full bg-primary text-primary-foreground py-3 rounded-lg font-semibold hover:bg-primary/90 active:scale-[0.99] transition-colors"
             >
               פרסום
             </button>

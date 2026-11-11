@@ -23,9 +23,6 @@ function getParticipantDisplayName(reg: Registration): string {
   return reg.participant_kind === 'self' ? 'הורה' : reg.participant_kind === 'dependent' ? 'ילד/ה' : 'אחר';
 }
 
-function getParticipantIcon(kind: Registration['participant_kind']): string {
-  return kind === 'dependent' ? '👧' : kind === 'other' ? '🧑' : '👤';
-}
 
 export function ActivityParticipants({ eventId, priceAmount = 0 }: { eventId: string; priceAmount?: number }) {
   const { user } = useAuth();
@@ -131,9 +128,9 @@ export function ActivityParticipants({ eventId, priceAmount = 0 }: { eventId: st
 
   return (
     <div className="mt-8 pt-8 border-t border-[var(--color-border)]">
-      <h2 className="font-sans text-lg font-bold mb-4">👥 משתתפים ({registrations.length})</h2>
+      <h2 className="font-sans text-lg font-bold mb-4">משתתפים ({registrations.length})</h2>
 
-      <div className="mb-4 p-3 bg-blue-50 dark:bg-blue-950/30 rounded-lg border border-blue-200 dark:border-blue-800 text-sm text-blue-900 dark:text-blue-100">
+      <div className="mb-4 p-3 bg-primary/8 rounded-lg border border-primary/30 text-sm text-foreground">
         <p>רשומים: <strong>{stats.confirmed}</strong> | זיכויים: <strong>{stats.refunded}</strong> | בוטלו: <strong>{stats.cancelled}</strong></p>
       </div>
 
@@ -151,14 +148,14 @@ export function ActivityParticipants({ eventId, priceAmount = 0 }: { eventId: st
             {registrations.map((reg, idx) => (
               <tr key={idx} className="border-b border-[var(--color-border)] hover:bg-surface-2/50">
                 <td className="px-4 py-3">
-                  {getParticipantIcon(reg.participant_kind)} {getParticipantDisplayName(reg)}
+                  {getParticipantDisplayName(reg)}
                 </td>
                 <td className="px-4 py-3">{reg.amount_paid > 0 ? `${reg.amount_paid} ₪` : 'חינם'}</td>
                 <td className="px-4 py-3">
                   <span className={`px-2 py-1 rounded text-xs font-semibold ${
-                    reg.status === 'refunded' ? 'bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300' :
-                    reg.status === 'cancelled' ? 'bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300' :
-                    'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300'
+                    reg.status === 'refunded' ? 'bg-primary/10 text-primary' :
+                    reg.status === 'cancelled' ? 'bg-urgent/10 text-urgent' :
+                    'bg-secondary/10 text-secondary'
                   }`}>
                     {reg.status === 'refunded' ? 'זוכה' :
                      reg.status === 'cancelled' ? 'בוטל' : 'רשום'}
@@ -169,7 +166,7 @@ export function ActivityParticipants({ eventId, priceAmount = 0 }: { eventId: st
                     {(reg.status === 'confirmed' || !reg.status) && reg.amount_paid > 0 && (
                       <button
                         onClick={() => handleRefund(idx)}
-                        className="p-1.5 bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 rounded hover:bg-blue-200 dark:hover:bg-blue-900/50"
+                        className="p-1.5 bg-primary/10 text-primary rounded hover:bg-primary/25"
                         title="החזר כספי"
                       >
                         <RotateCcw className="w-4 h-4" />
@@ -178,7 +175,7 @@ export function ActivityParticipants({ eventId, priceAmount = 0 }: { eventId: st
                     {(reg.status === 'confirmed' || !reg.status) && (
                       <button
                         onClick={() => handleCancel(idx)}
-                        className="p-1.5 bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300 rounded hover:bg-red-200 dark:hover:bg-red-900/50"
+                        className="p-1.5 bg-urgent/10 text-urgent rounded hover:bg-urgent/25"
                         title="בטל הרשמה"
                       >
                         <X className="w-4 h-4" />

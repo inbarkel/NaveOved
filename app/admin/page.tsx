@@ -5,20 +5,36 @@ import { supabase } from '@/lib/supabase-client';
 import { useAuth } from '@/lib/auth-context';
 import { useIsCommittee } from '@/lib/use-committee-role';
 import { useRouter } from 'next/navigation';
-import { AlertCircle, Users, MessageSquare, AlertTriangle, FileText, Plus, Settings, Briefcase, Trash2, Download, Upload } from 'lucide-react';
+import { AlertCircle, Users, MessageSquare, FileText, Plus, Settings, Briefcase, Trash2, Download, Upload, LayoutDashboard, Megaphone, Inbox, ClipboardList, DoorOpen } from 'lucide-react';
+import { OverviewTab } from '@/components/admin/OverviewTab';
+import { RequestsTab } from '@/components/admin/RequestsTab';
+import { useAdminCounts } from '@/components/admin/useAdminCounts';
 import { CreateActivityForm } from '@/components/clubs/CreateActivityForm';
 import { getCustomActivities, deleteActivityById } from '@/lib/activity-overrides';
 
-type TabType = 'announcements' | 'users' | 'moderation' | 'gate' | 'content' | 'committee' | 'registrations';
+type TabType = 'overview' | 'announcements' | 'registrations' | 'content' | 'committee' | 'users' | 'requests' | 'moderation' | 'gate';
+
+const NAV: { id: TabType; label: string; icon: any; group: string }[] = [
+  { id: 'overview', label: 'סקירה', icon: LayoutDashboard, group: 'ראשי' },
+  { id: 'announcements', label: 'הודעות', icon: Megaphone, group: 'תקשורת' },
+  { id: 'requests', label: 'פניות תושבים', icon: Inbox, group: 'תקשורת' },
+  { id: 'moderation', label: 'דיווחים', icon: MessageSquare, group: 'תקשורת' },
+  { id: 'content', label: 'פעילויות וחוגים', icon: FileText, group: 'ניהול המושב' },
+  { id: 'registrations', label: 'הרשמות', icon: ClipboardList, group: 'ניהול המושב' },
+  { id: 'users', label: 'תושבים', icon: Users, group: 'ניהול המושב' },
+  { id: 'gate', label: 'שער', icon: DoorOpen, group: 'ניהול המושב' },
+  { id: 'committee', label: 'חברי ועד', icon: Briefcase, group: 'הרשאות' },
+];
 
 export default function AdminPage() {
   const { user, isLoading: authLoading } = useAuth();
   const { isCommittee, isLoading: roleLoading } = useIsCommittee();
   const router = useRouter();
-  const [activeTab, setActiveTab] = useState<TabType>('announcements');
+  const [activeTab, setActiveTab] = useState<TabType>('overview');
   const [isLoading, setIsLoading] = useState(false);
   const [message, setMessage] = useState('');
   const [messageType, setMessageType] = useState<'success' | 'error'>('success');
+  const { counts, refresh } = useAdminCounts();
 
   useEffect(() => {
     if (authLoading || roleLoading) return;
@@ -41,58 +57,90 @@ export default function AdminPage() {
     setTimeout(() => setMessage(''), 3000);
   };
 
+  const badge = (id: TabType) =>
+    id === 'users' ? counts.pendingResidents : id === 'requests' ? counts.openRequests : null;
+
+  const groups = Array.from(new Set(NAV.map((n) => n.group)));
+  const current = NAV.find((n) => n.id === activeTab)!;
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[var(--color-surface)] to-[var(--color-surface-2)]">
-      {/* Header */}
-      <div className="bg-primary/10 border-b border-[var(--color-border)] sticky top-0 z-10">
-        <div className="max-w-6xl mx-auto px-4 py-4">
-          <h1 className="font-sans text-2xl font-bold text-primary">לוח בקרה לניהול</h1>
-        </div>
+    <div className="mx-auto max-w-6xl px-4 py-5">
+      <div className="mb-5">
+        <h1 className="text-2xl font-extrabold">ניהול המושב</h1>
+        <p className="text-sm text-muted-foreground">כל מה שהוועד צריך כדי לנהל את הקהילה, במקום אחד.</p>
       </div>
 
-      {/* Tabs */}
-      <div className="max-w-6xl mx-auto">
-        <div className="grid grid-cols-3 gap-2 px-4 py-4 border-b border-[var(--color-border)]">
-          {[
-            { id: 'announcements', label: 'הודעות', icon: AlertCircle },
-            { id: 'registrations', label: 'רישומים', icon: Users },
-            { id: 'content', label: 'תוכן', icon: FileText },
-            { id: 'committee', label: 'וועד', icon: Briefcase },
-            { id: 'users', label: 'משתמשים', icon: Users },
-            { id: 'moderation', label: 'דיווחים', icon: MessageSquare },
-            { id: 'gate', label: 'שער', icon: AlertTriangle },
-          ].map(({ id, label, icon: Icon }) => (
-            <button
-              key={id}
-              onClick={() => setActiveTab(id as TabType)}
-              className={`flex items-center justify-center gap-2 px-3 py-2 rounded-lg transition-colors text-sm font-semibold ${
-                activeTab === id
-                  ? 'bg-primary text-white'
-                  : 'bg-surface text-foreground hover:bg-surface-2'
+      <div className="lg:grid lg:grid-cols-[13rem_1fr] lg:gap-6">
+        {/* Phone: one scrolling strip. Desktop: grouped sidebar. */}
+        <nav aria-label="אזורי ניהול" className="mb-4 lg:mb-0">
+          <div className="-mx-4 flex gap-1.5 overflow-x-auto px-4 pb-1 lg:hidden">
+            {NAV.map(({ id, label, icon: Icon }) => (
+              <button
+                key={id}
+                onClick={() => setActiveTab(id)}
+                aria-current={activeTab === id ? 'page' : undefined}
+                className={`flex shrink-0 items-center gap-1.5 rounded-lg border px-3 py-2 text-sm font-semibold transition-colors ${
+                  activeTab === id
+                    ? 'border-primary bg-primary text-primary-foreground'
+                    : 'border-[var(--color-border)] bg-surface hover:bg-surface-2'
+                }`}
+              >
+                <Icon className="h-4 w-4" aria-hidden />
+                {label}
+                {!!badge(id) && (
+                  <span className="rounded bg-accent px-1.5 text-xs font-bold text-accent-foreground">{badge(id)}</span>
+                )}
+              </button>
+            ))}
+          </div>
+
+          <div className="sticky top-20 hidden space-y-5 lg:block">
+            {groups.map((g) => (
+              <div key={g}>
+                <p className="mb-1.5 px-3 text-xs font-bold text-muted-foreground">{g}</p>
+                <ul className="space-y-0.5">
+                  {NAV.filter((n) => n.group === g).map(({ id, label, icon: Icon }) => (
+                    <li key={id}>
+                      <button
+                        onClick={() => setActiveTab(id)}
+                        aria-current={activeTab === id ? 'page' : undefined}
+                        className={`flex w-full items-center gap-2.5 rounded-lg px-3 py-2 text-start text-sm font-semibold transition-colors ${
+                          activeTab === id ? 'bg-primary text-primary-foreground' : 'hover:bg-surface-2'
+                        }`}
+                      >
+                        <Icon className="h-4 w-4 shrink-0" aria-hidden />
+                        <span className="flex-1">{label}</span>
+                        {!!badge(id) && (
+                          <span className="rounded bg-accent px-1.5 text-xs font-bold text-accent-foreground">{badge(id)}</span>
+                        )}
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </div>
+        </nav>
+
+        <div className="min-w-0">
+          <h2 className="sr-only">{current.label}</h2>
+
+          {message && (
+            <div
+              role="status"
+              className={`mb-4 rounded-lg border p-3 text-sm font-semibold ${
+                messageType === 'success'
+                  ? 'border-secondary/40 bg-secondary/10 text-secondary'
+                  : 'border-urgent/50 bg-urgent/10 text-urgent'
               }`}
             >
-              <Icon className="w-4 h-4" />
-              {label}
-            </button>
-          ))}
-        </div>
+              {message}
+            </div>
+          )}
 
-        {/* Message */}
-        {message && (
-          <div
-            className={`mx-4 mt-4 p-3 rounded-lg text-sm ${
-              messageType === 'success'
-                ? 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300'
-                : 'bg-urgent/20 border border-urgent text-urgent'
-            }`}
-          >
-            {message}
-          </div>
-        )}
-
-        {/* Content */}
-        <div className="p-4">
+          {activeTab === 'overview' && <OverviewTab counts={counts} goTo={setActiveTab} />}
           {activeTab === 'announcements' && <AnnouncementsTab onMessage={showMessage} userId={user?.id || 'demo-user'} isLoading={isLoading} setIsLoading={setIsLoading} />}
+          {activeTab === 'requests' && <RequestsTab onMessage={showMessage} onChanged={refresh} />}
           {activeTab === 'registrations' && <RegistrationsTab onMessage={showMessage} />}
           {activeTab === 'committee' && <CommitteeTab onMessage={showMessage} isLoading={isLoading} setIsLoading={setIsLoading} />}
           {activeTab === 'users' && <UsersTab onMessage={showMessage} />}
@@ -200,7 +248,7 @@ function AnnouncementsTab({ onMessage, userId, isLoading, setIsLoading }: any) {
             onChange={(e) => setTitle(e.target.value)}
             placeholder="כותרת ההודעה"
             disabled={isLoading}
-            className="w-full px-4 py-2 rounded-lg border border-[var(--color-border)] bg-background disabled:opacity-50"
+            className="w-full px-4 py-2 rounded-lg border border-[var(--color-border)] bg-surface disabled:opacity-50"
           />
         </div>
         <div>
@@ -211,7 +259,7 @@ function AnnouncementsTab({ onMessage, userId, isLoading, setIsLoading }: any) {
             placeholder="תוכן ההודעה..."
             rows={5}
             disabled={isLoading}
-            className="w-full px-4 py-2 rounded-lg border border-[var(--color-border)] bg-background disabled:opacity-50 resize-none"
+            className="w-full px-4 py-2 rounded-lg border border-[var(--color-border)] bg-surface disabled:opacity-50 resize-none"
           />
         </div>
         <div className="flex items-center gap-2">
@@ -227,23 +275,23 @@ function AnnouncementsTab({ onMessage, userId, isLoading, setIsLoading }: any) {
         <button
           type="submit"
           disabled={isLoading}
-          className="w-full bg-primary text-white py-2.5 rounded-lg font-semibold hover:bg-primary/90 disabled:opacity-50"
+          className="w-full bg-primary text-primary-foreground py-2.5 rounded-lg font-semibold hover:bg-primary/90 disabled:opacity-50"
         >
           {isLoading ? 'פורסם...' : 'פרסום'}
         </button>
       </form>
 
       {lastAnnouncementId && (
-        <div className="mt-6 p-4 bg-green-50 dark:bg-green-950/30 border border-green-200 dark:border-green-800 rounded-lg">
-          <p className="text-sm text-green-900 dark:text-green-100 mb-3">
+        <div className="mt-6 p-4 bg-secondary/8 border border-secondary/30 rounded-lg">
+          <p className="text-sm text-foreground mb-3">
             ✓ הודעה פורסמה. כעת אתה יכול לשלוח אותה לכל התושבים.
           </p>
           <button
             onClick={handleSend}
             disabled={isSending}
-            className="w-full bg-green-600 text-white py-2.5 rounded-lg font-semibold hover:bg-green-700 disabled:opacity-50"
+            className="w-full bg-secondary text-secondary-foreground py-2.5 rounded-lg font-semibold hover:opacity-90 disabled:opacity-50"
           >
-            {isSending ? 'משלוח...' : '📢 אשר שליחה לכל התושבים'}
+            {isSending ? 'משלוח...' : 'אשר שליחה לכל התושבים'}
           </button>
         </div>
       )}
@@ -371,11 +419,11 @@ function UsersTab({ onMessage }: any) {
                         <div>
                           <p className="font-semibold">{admin.full_name}</p>
                           <p className="text-xs text-muted-foreground">{admin.phone_e164}</p>
-                          <p className="text-xs text-green-600">✓ אומת</p>
+                          <p className="text-xs text-secondary">✓ אומת</p>
                         </div>
                         <button
                           onClick={() => handleDeleteAdmin(admin.id)}
-                          className="p-2 hover:bg-urgent/20 rounded-lg transition-colors"
+                          className="p-2 hover:bg-urgent/10 rounded-lg transition-colors"
                           aria-label="מחק אדמין"
                         >
                           <Trash2 className="w-4 h-4 text-urgent" />
@@ -402,11 +450,11 @@ function UsersTab({ onMessage }: any) {
                     <div>
                       <p className="font-semibold">{admin.full_name}</p>
                       <p className="text-xs text-muted-foreground">{admin.phone_e164}</p>
-                      <p className="text-xs text-green-600">✓ אומת</p>
+                      <p className="text-xs text-secondary">✓ אומת</p>
                     </div>
                     <button
                       onClick={() => handleDeleteAdmin(admin.id)}
-                      className="p-2 hover:bg-urgent/20 rounded-lg transition-colors"
+                      className="p-2 hover:bg-urgent/10 rounded-lg transition-colors"
                       aria-label="מחק אדמין"
                     >
                       <Trash2 className="w-4 h-4 text-urgent" />
@@ -476,17 +524,17 @@ function UsersTab({ onMessage }: any) {
                     <div key={user.id} className="bg-surface rounded-lg p-4 border border-[var(--color-border)]">
                       <p className="font-semibold">{user.full_name}</p>
                       <p className="text-xs text-muted-foreground">{user.phone}</p>
-                      <p className="text-xs text-warning mt-1">⏳ מחכה לאישור וועד</p>
+                      <p className="text-xs text-accent mt-1">מחכה לאישור וועד</p>
                       <div className="flex gap-2 mt-3">
                         <button
                           onClick={() => handleApproveUser(user.id)}
-                          className="px-3 py-1 bg-green-500/20 text-green-700 rounded text-xs font-semibold hover:bg-green-500/30 transition-colors"
+                          className="px-3 py-1 bg-secondary/10 text-secondary rounded text-xs font-semibold hover:bg-secondary/25 transition-colors"
                         >
                           אשר
                         </button>
                         <button
                           onClick={() => handleRejectUser(user.id)}
-                          className="px-3 py-1 bg-urgent/20 text-urgent rounded text-xs font-semibold hover:bg-urgent/30 transition-colors"
+                          className="px-3 py-1 bg-urgent/10 text-urgent rounded text-xs font-semibold hover:bg-urgent/30 transition-colors"
                         >
                           דחה
                         </button>
@@ -522,12 +570,12 @@ function UsersTab({ onMessage }: any) {
                           <p className="font-semibold">{user.full_name}</p>
                           <p className="text-xs text-muted-foreground">{user.phone}</p>
                           <p className="text-xs mt-1">
-                            סטטוס: {user.status === 'active' ? '✓ פעיל' : user.status === 'pending' ? '⏳ ממתין' : '❌ נדחה'}
+                            סטטוס: {user.status === 'active' ? '✓ פעיל' : user.status === 'pending' ? 'ממתין' : 'נדחה'}
                           </p>
                         </div>
                         <button
                           onClick={() => handleDeleteUser(user.id)}
-                          className="p-2 hover:bg-urgent/20 rounded-lg transition-colors"
+                          className="p-2 hover:bg-urgent/10 rounded-lg transition-colors"
                           aria-label="מחק משתמש"
                         >
                           <Trash2 className="w-4 h-4 text-urgent" />
@@ -554,7 +602,7 @@ function UsersTab({ onMessage }: any) {
                     <p className="font-semibold">{user.full_name || 'ללא שם'}</p>
                     <p className="text-xs text-muted-foreground">{user.phone || 'אין טלפון'}</p>
                     <p className="text-xs mt-1">
-                      סטטוס: {user.status === 'active' ? '✓ פעיל' : user.status === 'pending' ? '⏳ ממתין' : '❌ נדחה'}
+                      סטטוס: {user.status === 'active' ? '✓ פעיל' : user.status === 'pending' ? 'ממתין' : 'נדחה'}
                     </p>
                   </div>
                 ))}
@@ -700,7 +748,7 @@ function CommitteeTab({ onMessage, isLoading, setIsLoading }: any) {
             onChange={(e) => setNewName(e.target.value)}
             placeholder="שם חבר הוועד"
             disabled={isLoading}
-            className="w-full px-4 py-2 rounded-lg border border-[var(--color-border)] bg-background disabled:opacity-50"
+            className="w-full px-4 py-2 rounded-lg border border-[var(--color-border)] bg-surface disabled:opacity-50"
           />
         </div>
         <div>
@@ -711,13 +759,13 @@ function CommitteeTab({ onMessage, isLoading, setIsLoading }: any) {
             onChange={(e) => setNewPhone(formatPhone(e.target.value))}
             placeholder="050-123-4567"
             disabled={isLoading}
-            className="w-full px-4 py-2 rounded-lg border border-[var(--color-border)] bg-background disabled:opacity-50"
+            className="w-full px-4 py-2 rounded-lg border border-[var(--color-border)] bg-surface disabled:opacity-50"
           />
         </div>
         <button
           type="submit"
           disabled={isLoading}
-          className="w-full bg-primary text-white py-2.5 rounded-lg font-semibold hover:bg-primary/90 disabled:opacity-50 flex items-center justify-center gap-2"
+          className="w-full bg-primary text-primary-foreground py-2.5 rounded-lg font-semibold hover:bg-primary/90 disabled:opacity-50 flex items-center justify-center gap-2"
         >
           <Plus className="w-4 h-4" />
           הוסף הזמנה
@@ -737,7 +785,7 @@ function CommitteeTab({ onMessage, isLoading, setIsLoading }: any) {
                 <p className="font-semibold">{inv.full_name}</p>
                 <p className="text-xs text-muted-foreground">{inv.phone_e164}</p>
                 <p className="text-xs text-muted-foreground">
-                  {inv.status === 'pending' ? '⏳ ממתין' : inv.status === 'claimed' ? '✓ אומת' : '❌ נדחה'}
+                  {inv.status === 'pending' ? 'ממתין' : inv.status === 'claimed' ? '✓ אומת' : 'נדחה'}
                 </p>
               </div>
               <button
@@ -761,7 +809,7 @@ function ModerationTab({ onMessage }: any) {
       <h2 className="font-sans text-xl font-bold mb-4">דיווחים</h2>
       <div className="bg-surface rounded-2xl p-6 border border-[var(--color-border)] space-y-4">
         <div className="text-sm text-muted-foreground">
-          <p>⏳ בקרוב:</p>
+          <p>בקרוב:</p>
           <ul className="list-disc list-inside mt-2 space-y-1">
             <li>דיווחים על פוסטים לא ראויים</li>
             <li>ניהול דיווחים</li>
@@ -780,7 +828,7 @@ function GateTab({ onMessage }: any) {
       <h2 className="font-sans text-xl font-bold mb-4">ניהול שער</h2>
       <div className="bg-surface rounded-2xl p-6 border border-[var(--color-border)] space-y-4">
         <div className="text-sm text-muted-foreground">
-          <p>⏳ בקרוב:</p>
+          <p>בקרוב:</p>
           <ul className="list-disc list-inside mt-2 space-y-1">
             <li>דיווחים על תקלות בשער</li>
             <li>בקשות להוספת טלפונים</li>
@@ -845,7 +893,7 @@ function RegistrationsTab({ onMessage }: any) {
             onClick={() => setFilterStatus(status)}
             className={`px-4 py-2 rounded-lg text-sm font-semibold transition-colors ${
               filterStatus === status
-                ? 'bg-primary text-white'
+                ? 'bg-primary text-primary-foreground'
                 : 'bg-surface hover:bg-surface-2'
             }`}
           >
@@ -880,9 +928,9 @@ function RegistrationsTab({ onMessage }: any) {
                   <td className="px-4 py-3">{reg.amount_paid > 0 ? `${reg.amount_paid} ₪` : 'חינם'}</td>
                   <td className="px-4 py-3">
                     <span className={`px-2 py-1 rounded text-xs font-semibold ${
-                      reg.status === 'refunded' ? 'bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300' :
-                      reg.status === 'cancelled' ? 'bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300' :
-                      'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300'
+                      reg.status === 'refunded' ? 'bg-primary/10 text-primary' :
+                      reg.status === 'cancelled' ? 'bg-urgent/10 text-urgent' :
+                      'bg-secondary/10 text-secondary'
                     }`}>
                       {reg.status === 'refunded' ? 'זוכה' : reg.status === 'cancelled' ? 'בוטל' : 'רשום'}
                     </span>
@@ -892,7 +940,7 @@ function RegistrationsTab({ onMessage }: any) {
                       {(reg.status === 'confirmed' || !reg.status) && reg.amount_paid > 0 && (
                         <button
                           onClick={() => handleRefund(registrations.indexOf(reg))}
-                          className="px-2 py-1 text-xs bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 rounded hover:bg-blue-200 dark:hover:bg-blue-900/50"
+                          className="px-2 py-1 text-xs bg-primary/10 text-primary rounded hover:bg-primary/25"
                         >
                           החזר כסף
                         </button>
@@ -900,7 +948,7 @@ function RegistrationsTab({ onMessage }: any) {
                       {(reg.status === 'confirmed' || !reg.status) && (
                         <button
                           onClick={() => handleCancel(registrations.indexOf(reg))}
-                          className="px-2 py-1 text-xs bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300 rounded hover:bg-red-200 dark:hover:bg-red-900/50"
+                          className="px-2 py-1 text-xs bg-urgent/10 text-urgent rounded hover:bg-urgent/25"
                         >
                           ביטול
                         </button>
@@ -914,9 +962,9 @@ function RegistrationsTab({ onMessage }: any) {
         </div>
       )}
 
-      <div className="mt-6 p-4 bg-blue-50 dark:bg-blue-950/30 rounded-lg border border-blue-200 dark:border-blue-800">
-        <p className="text-sm text-blue-900 dark:text-blue-100">
-          📊 סה"כ רישומים: <strong>{registrations.length}</strong> |
+      <div className="mt-6 p-4 bg-primary/8 rounded-lg border border-primary/30">
+        <p className="text-sm text-foreground">
+          סה"כ רישומים: <strong>{registrations.length}</strong> |
           רשומים: <strong>{registrations.filter(r => r.status === 'confirmed' || !r.status).length}</strong> |
           בוטלו: <strong>{registrations.filter(r => r.status === 'cancelled').length}</strong> |
           זיכויים: <strong>{registrations.filter(r => r.status === 'refunded').length}</strong>
@@ -955,13 +1003,13 @@ function ContentTab({ onMessage, userId, isLoading, setIsLoading }: any) {
               {action ? (
                 <button
                   onClick={action}
-                  className="w-full mt-4 bg-primary text-white py-2 rounded-lg text-sm font-semibold hover:bg-primary/90 transition-colors"
+                  className="w-full mt-4 bg-primary text-primary-foreground py-2 rounded-lg text-sm font-semibold hover:bg-primary/90 transition-colors"
                 >
                   + הוספה
                 </button>
               ) : (
                 <button disabled className="w-full mt-4 bg-primary/20 text-primary py-2 rounded-lg text-sm font-semibold cursor-not-allowed">
-                  ⏳ בקרוב
+                  בקרוב
                 </button>
               )}
             </div>
@@ -981,7 +1029,7 @@ function ContentTab({ onMessage, userId, isLoading, setIsLoading }: any) {
                 </div>
                 <button
                   onClick={() => handleDelete(event.id, event.title)}
-                  className="p-2 hover:bg-red-100 dark:hover:bg-red-900/30 rounded-lg text-red-700 dark:text-red-300 transition-colors shrink-0"
+                  className="p-2 hover:bg-urgent/10 rounded-lg text-urgent transition-colors shrink-0"
                 >
                   <Trash2 className="w-4 h-4" />
                 </button>

@@ -1,41 +1,85 @@
+"use client";
+
 import Link from "next/link";
-import { Card } from "@/components/ui/Card";
+import { ChevronLeft } from "lucide-react";
+import { useAuth } from "@/lib/auth-context";
 import { getIcon } from "@/lib/icons";
 
-const ROWS = [
-  { label: "הגדרות אישיות", sub: "עדכון פרטים, ילדים והעדפות", iconKey: "settings", href: "/more/settings" },
-  { label: "פניות לועד", sub: "שליחת בקשה ומעקב אחר פניות קודמות", iconKey: "requests", href: "/more/requests" },
-  { label: "מידע שימושי", sub: "פינוי אשפה, מקלטים, גנים, בריאות ועוד", iconKey: "info", href: "/more/info" },
-  { label: "מפה", sub: "מפת המושב ורחובות", iconKey: "map", href: "/more/map" },
-  { label: "שער", sub: "פתיחה דרך PalGate ודיווח תקלות", iconKey: "gate", href: "/more/gate" },
-  { label: "לתושבים חדשים", sub: "שער, תא דואר ואישור תושבות - במקום אחד", iconKey: "users", href: "/more/new-residents" },
-  { label: "אודות המושב", sub: "היסטוריה ונתונים", iconKey: "landmark", href: "/more/about" },
-  { label: "תנאי שימוש", sub: "התנאים והכללים", iconKey: "scroll", href: "/more/terms" },
-  { label: "נגישות", sub: "הצהרת נגישות", iconKey: "accessibility", href: "/more/accessibility" },
-  { label: "פרטיות", sub: "מדיניות הפרטיות", iconKey: "lock", href: "/more/privacy" },
+interface Row {
+  label: string;
+  sub: string;
+  iconKey: string;
+  href: string;
+}
+
+interface Group {
+  title: string;
+  rows: Row[];
+  requiresLogin?: boolean;
+}
+
+const GROUPS: Group[] = [
+  {
+    title: "החשבון שלי",
+    requiresLogin: true,
+    rows: [
+      { label: "הגדרות אישיות", sub: "פרטים, ילדים והעדפות", iconKey: "settings", href: "/more/settings" },
+      { label: "פנייה לוועד", sub: "שליחת בקשה ומעקב אחרי תשובות", iconKey: "requests", href: "/more/requests" },
+    ],
+  },
+  {
+    title: "במושב",
+    rows: [
+      { label: "שער", sub: "פתיחה דרך PalGate ודיווח על תקלה", iconKey: "gate", href: "/more/gate" },
+      { label: "מפה", sub: "המושב והרחובות", iconKey: "map", href: "/more/map" },
+      { label: "מידע שימושי", sub: "מקלטים, גנים, בריאות ועוד", iconKey: "info", href: "/more/info" },
+      { label: "לתושבים חדשים", sub: "שער, תא דואר ואישור תושבות", iconKey: "users", href: "/more/new-residents" },
+      { label: "על המושב", sub: "היסטוריה ונתונים", iconKey: "landmark", href: "/more/about" },
+    ],
+  },
+  {
+    title: "מידע משפטי",
+    rows: [
+      { label: "נגישות", sub: "הצהרת נגישות", iconKey: "accessibility", href: "/more/accessibility" },
+      { label: "פרטיות", sub: "מדיניות הפרטיות", iconKey: "lock", href: "/more/privacy" },
+      { label: "תנאי שימוש", sub: "התנאים והכללים", iconKey: "scroll", href: "/more/terms" },
+    ],
+  },
 ];
 
 export default function MorePage() {
-  return (
-    <div className="max-w-2xl mx-auto px-4 py-5 space-y-5">
-      <h1 className="font-sans text-2xl font-bold">עוד</h1>
+  const { user } = useAuth();
 
-      <div className="grid grid-cols-2 gap-3">
-        {ROWS.map((row) => {
-          const Icon = getIcon(row.iconKey);
-          return (
-            <Link key={row.label} href={row.href} className="block">
-              <Card className="p-3 flex flex-col items-center text-center gap-1 h-full active:scale-[0.99] transition-transform">
-                <div className="rounded-xl bg-surface-2 p-2">
-                  <Icon className="w-5 h-5 text-primary" aria-hidden />
-                </div>
-                <p className="font-semibold text-xs">{row.label}</p>
-                <p className="text-[11px] text-muted-foreground">{row.sub}</p>
-              </Card>
-            </Link>
-          );
-        })}
-      </div>
+  return (
+    <div className="mx-auto max-w-3xl space-y-7 px-4 py-6">
+      <h1 className="text-2xl font-extrabold">עוד</h1>
+
+      {GROUPS.filter((g) => !g.requiresLogin || user).map((group) => (
+        <section key={group.title} aria-labelledby={`g-${group.title}`}>
+          <h2 id={`g-${group.title}`} className="mb-2 text-sm font-bold text-muted-foreground">
+            {group.title}
+          </h2>
+          <ul className="contrast-surface divide-y divide-[var(--color-border)] overflow-hidden rounded-2xl border border-[var(--color-border)] bg-surface">
+            {group.rows.map((row) => {
+              const Icon = getIcon(row.iconKey);
+              return (
+                <li key={row.href}>
+                  <Link href={row.href} className="flex items-center gap-3 px-4 py-3.5 transition-colors hover:bg-surface-2 active:bg-surface-2">
+                    <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-[color-mix(in_srgb,var(--color-primary)_12%,transparent)] text-primary">
+                      <Icon className="h-5 w-5" aria-hidden />
+                    </span>
+                    <span className="min-w-0 flex-1">
+                      <span className="block font-bold leading-snug">{row.label}</span>
+                      <span className="block text-sm text-muted-foreground">{row.sub}</span>
+                    </span>
+                    <ChevronLeft className="h-4 w-4 shrink-0 text-muted-foreground" aria-hidden />
+                  </Link>
+                </li>
+              );
+            })}
+          </ul>
+        </section>
+      ))}
     </div>
   );
 }

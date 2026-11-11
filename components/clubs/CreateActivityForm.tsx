@@ -98,14 +98,14 @@ export function CreateActivityForm({
           </button>
         </div>
 
-        {error && <div className="p-3 rounded-lg text-sm bg-red-500/20 text-red-700">{error}</div>}
+        {error && <div className="p-3 rounded-lg text-sm bg-urgent/10 text-urgent">{error}</div>}
 
         <div className="grid grid-cols-2 gap-2">
           <button
             type="button"
             onClick={() => setForm({ ...EMPTY_FORM, kind: "פעילות" })}
             className={`py-2 rounded-lg text-sm font-semibold border transition-colors ${
-              form.kind === "פעילות" ? "bg-primary text-white border-primary" : "border-[var(--color-border)] text-muted-foreground"
+              form.kind === "פעילות" ? "bg-primary text-primary-foreground border-primary" : "border-[var(--color-border)] text-muted-foreground"
             }`}
           >
             פעילות
@@ -114,7 +114,7 @@ export function CreateActivityForm({
             type="button"
             onClick={() => setForm({ ...EMPTY_FORM, kind: "חוג" })}
             className={`py-2 rounded-lg text-sm font-semibold border transition-colors ${
-              form.kind === "חוג" ? "bg-primary text-white border-primary" : "border-[var(--color-border)] text-muted-foreground"
+              form.kind === "חוג" ? "bg-primary text-primary-foreground border-primary" : "border-[var(--color-border)] text-muted-foreground"
             }`}
           >
             חוג
@@ -128,7 +128,7 @@ export function CreateActivityForm({
               type="text"
               value={form.title}
               onChange={(e) => setForm({ ...form, title: e.target.value })}
-              className="w-full px-3 py-2 rounded-lg border border-[var(--color-border)] bg-background text-sm"
+              className="w-full px-3 py-2 rounded-lg border border-[var(--color-border)] bg-surface text-sm"
             />
           </div>
           <div>
@@ -137,7 +137,7 @@ export function CreateActivityForm({
               value={form.description}
               onChange={(e) => setForm({ ...form, description: e.target.value })}
               rows={3}
-              className="w-full px-3 py-2 rounded-lg border border-[var(--color-border)] bg-background text-sm resize-none"
+              className="w-full px-3 py-2 rounded-lg border border-[var(--color-border)] bg-surface text-sm resize-none"
             />
           </div>
 
@@ -148,7 +148,7 @@ export function CreateActivityForm({
                 type="datetime-local"
                 value={form.eventDateStr}
                 onChange={(e) => setForm({ ...form, eventDateStr: e.target.value })}
-                className="w-full px-3 py-2 rounded-lg border border-[var(--color-border)] bg-background text-sm"
+                className="w-full px-3 py-2 rounded-lg border border-[var(--color-border)] bg-surface text-sm"
               />
             </div>
           ) : (
@@ -163,7 +163,7 @@ export function CreateActivityForm({
                       onClick={() => toggleDay(day)}
                       className={`px-3 py-1.5 rounded-full text-xs font-semibold border transition-colors ${
                         form.daysOfWeek.includes(day)
-                          ? "bg-primary text-white border-primary"
+                          ? "bg-primary text-primary-foreground border-primary"
                           : "border-[var(--color-border)] text-muted-foreground"
                       }`}
                     >
@@ -179,7 +179,7 @@ export function CreateActivityForm({
                   value={form.time}
                   onChange={(e) => setForm({ ...form, time: e.target.value })}
                   placeholder="לדוגמה: 18:00–19:00"
-                  className="w-full px-3 py-2 rounded-lg border border-[var(--color-border)] bg-background text-sm"
+                  className="w-full px-3 py-2 rounded-lg border border-[var(--color-border)] bg-surface text-sm"
                 />
               </div>
               <div className="grid grid-cols-2 gap-2">
@@ -189,7 +189,7 @@ export function CreateActivityForm({
                     type="date"
                     value={form.startDate}
                     onChange={(e) => setForm({ ...form, startDate: e.target.value })}
-                    className="w-full px-3 py-2 rounded-lg border border-[var(--color-border)] bg-background text-sm"
+                    className="w-full px-3 py-2 rounded-lg border border-[var(--color-border)] bg-surface text-sm"
                   />
                 </div>
                 <div>
@@ -198,7 +198,7 @@ export function CreateActivityForm({
                     type="date"
                     value={form.endDate}
                     onChange={(e) => setForm({ ...form, endDate: e.target.value })}
-                    className="w-full px-3 py-2 rounded-lg border border-[var(--color-border)] bg-background text-sm"
+                    className="w-full px-3 py-2 rounded-lg border border-[var(--color-border)] bg-surface text-sm"
                   />
                 </div>
               </div>
@@ -211,7 +211,7 @@ export function CreateActivityForm({
               type="text"
               value={form.location}
               onChange={(e) => setForm({ ...form, location: e.target.value })}
-              className="w-full px-3 py-2 rounded-lg border border-[var(--color-border)] bg-background text-sm"
+              className="w-full px-3 py-2 rounded-lg border border-[var(--color-border)] bg-surface text-sm"
             />
           </div>
 
@@ -223,7 +223,7 @@ export function CreateActivityForm({
                 value={form.price}
                 onChange={(e) => setForm({ ...form, price: e.target.value })}
                 placeholder='"כניסה חופשית" או "80 ₪ לחודש"'
-                className="w-full px-3 py-2 rounded-lg border border-[var(--color-border)] bg-background text-sm"
+                className="w-full px-3 py-2 rounded-lg border border-[var(--color-border)] bg-surface text-sm"
               />
             </div>
             <div>
@@ -232,7 +232,7 @@ export function CreateActivityForm({
                 type="number"
                 value={form.priceAmount}
                 onChange={(e) => setForm({ ...form, priceAmount: e.target.value })}
-                className="w-full px-3 py-2 rounded-lg border border-[var(--color-border)] bg-background text-sm"
+                className="w-full px-3 py-2 rounded-lg border border-[var(--color-border)] bg-surface text-sm"
               />
             </div>
           </div>
@@ -244,7 +244,7 @@ export function CreateActivityForm({
                 type="number"
                 value={form.ageMinYears}
                 onChange={(e) => setForm({ ...form, ageMinYears: e.target.value })}
-                className="w-full px-3 py-2 rounded-lg border border-[var(--color-border)] bg-background text-sm"
+                className="w-full px-3 py-2 rounded-lg border border-[var(--color-border)] bg-surface text-sm"
               />
             </div>
             <div>
@@ -253,7 +253,7 @@ export function CreateActivityForm({
                 type="number"
                 value={form.ageMaxYears}
                 onChange={(e) => setForm({ ...form, ageMaxYears: e.target.value })}
-                className="w-full px-3 py-2 rounded-lg border border-[var(--color-border)] bg-background text-sm"
+                className="w-full px-3 py-2 rounded-lg border border-[var(--color-border)] bg-surface text-sm"
               />
             </div>
           </div>
@@ -265,7 +265,7 @@ export function CreateActivityForm({
                 type="number"
                 value={form.minRequired}
                 onChange={(e) => setForm({ ...form, minRequired: e.target.value })}
-                className="w-full px-3 py-2 rounded-lg border border-[var(--color-border)] bg-background text-sm"
+                className="w-full px-3 py-2 rounded-lg border border-[var(--color-border)] bg-surface text-sm"
               />
             </div>
             <div>
@@ -274,7 +274,7 @@ export function CreateActivityForm({
                 type="number"
                 value={form.maxCapacity}
                 onChange={(e) => setForm({ ...form, maxCapacity: e.target.value })}
-                className="w-full px-3 py-2 rounded-lg border border-[var(--color-border)] bg-background text-sm"
+                className="w-full px-3 py-2 rounded-lg border border-[var(--color-border)] bg-surface text-sm"
               />
             </div>
           </div>
@@ -285,7 +285,7 @@ export function CreateActivityForm({
               type="text"
               value={form.instructorName}
               onChange={(e) => setForm({ ...form, instructorName: e.target.value })}
-              className="w-full px-3 py-2 rounded-lg border border-[var(--color-border)] bg-background text-sm"
+              className="w-full px-3 py-2 rounded-lg border border-[var(--color-border)] bg-surface text-sm"
             />
           </div>
           <div>
@@ -294,14 +294,14 @@ export function CreateActivityForm({
               type="text"
               value={form.instructorPhone}
               onChange={(e) => setForm({ ...form, instructorPhone: e.target.value })}
-              className="w-full px-3 py-2 rounded-lg border border-[var(--color-border)] bg-background text-sm"
+              className="w-full px-3 py-2 rounded-lg border border-[var(--color-border)] bg-surface text-sm"
             />
           </div>
         </div>
 
         <button
           onClick={handleSubmit}
-          className="w-full bg-primary text-white py-3 rounded-lg font-semibold hover:bg-primary/90 active:scale-[0.99] transition-colors"
+          className="w-full bg-primary text-primary-foreground py-3 rounded-lg font-semibold hover:bg-primary/90 active:scale-[0.99] transition-colors"
         >
           פרסום
         </button>

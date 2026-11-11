@@ -19,35 +19,33 @@ export function Header() {
     router.push('/login');
   };
 
+  const iconBtn =
+    "grid h-10 w-10 place-items-center rounded-lg text-muted-foreground transition-colors hover:bg-surface-2 hover:text-foreground";
+
   return (
-    <header className="sticky top-0 z-30 flex items-center justify-between gap-3 px-4 py-3 bg-surface/95 backdrop-blur border-b border-[var(--color-border)]">
-      <Link href="/" className="flex items-center gap-2 hover:opacity-80 transition-opacity">
-        <Image src="/images/logo.png" alt="לוגו פוריה נווה עובד" width={32} height={32} className="rounded-full" />
-        <span className="font-sans font-bold text-lg">פוריה נווה עובד</span>
+    <header className="sticky top-0 z-30 flex items-center justify-between gap-3 border-b border-[var(--color-border)] bg-surface px-4 py-2.5">
+      <Link href="/" className="flex items-center gap-2.5">
+        <Image src="/images/logo.png" alt="לוגו פוריה נווה עובד" width={34} height={34} className="rounded-full" />
+        <span className="text-lg font-extrabold leading-none tracking-tight">פוריה נווה עובד</span>
       </Link>
-      <div className="flex items-center gap-1">
+      <div className="flex items-center gap-0.5">
         {isCommittee && (
-          <Link href="/admin" aria-label="ניהול" className="p-2 rounded-full hover:bg-surface-2 transition-colors" title="ניהול">
-            <Shield className="w-5 h-5" aria-hidden />
+          <Link href="/admin" aria-label="ניהול" className={`${iconBtn} text-primary`} title="ניהול">
+            <Shield className="h-5 w-5" aria-hidden />
           </Link>
         )}
         {user ? (
-          <button
-            onClick={handleLogout}
-            aria-label="התנתק"
-            className="p-2 rounded-full hover:bg-surface-2 transition-colors text-muted-foreground hover:text-foreground"
-            title="התנתק"
-          >
-            <LogOut className="w-5 h-5" aria-hidden />
+          <button onClick={handleLogout} aria-label="התנתקות" className={iconBtn} title="התנתקות">
+            <LogOut className="h-5 w-5" aria-hidden />
           </button>
         ) : (
           <Link
             href="/login"
             aria-label="התחברות"
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-primary text-primary-foreground text-sm font-semibold hover:bg-primary/90 transition-colors"
+            className="flex h-10 items-center gap-1.5 rounded-lg bg-primary px-3.5 text-sm font-bold text-primary-foreground transition-opacity hover:opacity-90"
             title="התחברות"
           >
-            <LogIn className="w-4 h-4" aria-hidden />
+            <LogIn className="h-4 w-4" aria-hidden />
             התחברות
           </Link>
         )}

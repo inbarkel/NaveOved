@@ -66,7 +66,7 @@ export default function BusinessesPage() {
       (b) => b.status !== "rejected" && b.name.trim().toLowerCase() === formData.name.trim().toLowerCase()
     );
     if (isDuplicate) {
-      setMessage("❌ עסק בשם הזה כבר קיים או ממתין לאישור");
+      setMessage("עסק בשם הזה כבר קיים או ממתין לאישור");
       return;
     }
 
@@ -111,7 +111,7 @@ export default function BusinessesPage() {
       </div>
 
       {message && (
-        <div className={`p-3 rounded-lg text-sm ${message.includes("✓") ? "bg-green-100/50 text-green-700" : "bg-red-100/50 text-red-700"}`}>
+        <div className={`p-3 rounded-lg text-sm ${message.includes("✓") ? "bg-secondary/10 text-secondary" : "bg-urgent/10 text-urgent"}`}>
           {message}
         </div>
       )}
@@ -120,7 +120,7 @@ export default function BusinessesPage() {
         <div className="space-y-2">
           <h2 className="text-sm font-semibold text-muted-foreground">ממתינים לאישור ({pendingBusinesses.length})</h2>
           {pendingBusinesses.map((business) => (
-            <Card key={business.id} className="p-4 border-amber-300 dark:border-amber-700">
+            <Card key={business.id} className="p-4 border-accent/50">
               <p className="font-semibold">{business.name}</p>
               <p className="text-xs text-muted-foreground mt-0.5">{categoryLabel(business.category)}</p>
               <p className="text-sm text-muted-foreground mt-1">{business.description}</p>
@@ -128,14 +128,14 @@ export default function BusinessesPage() {
               <div className="flex gap-2 mt-3">
                 <button
                   onClick={() => approveBusiness(business.id)}
-                  className="flex items-center gap-1 px-3 py-1.5 rounded-lg text-sm font-semibold bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300 hover:bg-green-200 dark:hover:bg-green-900/50 transition-colors"
+                  className="flex items-center gap-1 px-3 py-1.5 rounded-lg text-sm font-semibold bg-secondary/10 text-secondary hover:bg-secondary/25 transition-colors"
                 >
                   <Check className="w-4 h-4" />
                   אשר
                 </button>
                 <button
                   onClick={() => rejectBusiness(business.id)}
-                  className="flex items-center gap-1 px-3 py-1.5 rounded-lg text-sm font-semibold bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300 hover:bg-red-200 dark:hover:bg-red-900/50 transition-colors"
+                  className="flex items-center gap-1 px-3 py-1.5 rounded-lg text-sm font-semibold bg-urgent/10 text-urgent hover:bg-urgent/25 transition-colors"
                 >
                   <X className="w-4 h-4" />
                   דחה
@@ -217,7 +217,7 @@ export default function BusinessesPage() {
               value={formData.name}
               onChange={(e) => setFormData({ ...formData, name: e.target.value })}
               placeholder="שם העסק"
-              className="w-full px-3 py-2 rounded-lg border border-[var(--color-border)] bg-background text-sm"
+              className="w-full px-3 py-2 rounded-lg border border-[var(--color-border)] bg-surface text-sm"
             />
           </div>
           <div>
@@ -225,7 +225,7 @@ export default function BusinessesPage() {
             <select
               value={formData.category}
               onChange={(e) => setFormData({ ...formData, category: e.target.value })}
-              className="w-full px-3 py-2 rounded-lg border border-[var(--color-border)] bg-background text-sm"
+              className="w-full px-3 py-2 rounded-lg border border-[var(--color-border)] bg-surface text-sm"
             >
               {CATEGORIES.map((cat) => (
                 <option key={cat.value} value={cat.value}>
@@ -241,7 +241,7 @@ export default function BusinessesPage() {
               onChange={(e) => setFormData({ ...formData, description: e.target.value })}
               placeholder="מה אתה עושה?"
               rows={3}
-              className="w-full px-3 py-2 rounded-lg border border-[var(--color-border)] bg-background text-sm resize-none"
+              className="w-full px-3 py-2 rounded-lg border border-[var(--color-border)] bg-surface text-sm resize-none"
             />
           </div>
           <div>
@@ -251,11 +251,11 @@ export default function BusinessesPage() {
               value={formData.phone}
               onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
               placeholder="050-123-4567"
-              className="w-full px-3 py-2 rounded-lg border border-[var(--color-border)] bg-background text-sm"
+              className="w-full px-3 py-2 rounded-lg border border-[var(--color-border)] bg-surface text-sm"
             />
           </div>
           <div className="flex gap-2">
-            <button type="submit" className="flex-1 bg-primary text-white py-2 rounded-lg font-semibold hover:bg-primary/90">
+            <button type="submit" className="flex-1 bg-primary text-primary-foreground py-2 rounded-lg font-semibold hover:bg-primary/90">
               שלח לאישור
             </button>
             <button
@@ -266,7 +266,7 @@ export default function BusinessesPage() {
               ביטול
             </button>
           </div>
-          <p className="text-xs text-muted-foreground text-center">⏳ העסק שלך יופיע כאן כשהוועד יאשר</p>
+          <p className="text-xs text-muted-foreground text-center">העסק שלך יופיע כאן כשהוועד יאשר</p>
         </form>
       )}
     </div>

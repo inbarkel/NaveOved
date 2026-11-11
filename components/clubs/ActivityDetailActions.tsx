@@ -226,7 +226,7 @@ export function ActivityDetailActions({
 
   if (!user) {
     return (
-      <button disabled className="w-full bg-primary/50 text-white py-3 rounded-lg font-semibold cursor-not-allowed">
+      <button disabled className="w-full bg-primary/50 text-primary-foreground py-3 rounded-lg font-semibold cursor-not-allowed">
         התחברי קודם
       </button>
     );
@@ -243,7 +243,7 @@ export function ActivityDetailActions({
         </div>
         <button
           onClick={handleCancelRegistration}
-          className="w-full border border-red-300 dark:border-red-800 text-red-700 dark:text-red-300 py-3 rounded-lg font-semibold hover:bg-red-50 dark:hover:bg-red-900/20 active:scale-[0.99] transition-colors"
+          className="w-full border border-urgent/50 text-urgent py-3 rounded-lg font-semibold hover:bg-urgent/10 active:scale-[0.99] transition-colors"
         >
           בטלי הרשמה
         </button>
@@ -263,7 +263,7 @@ export function ActivityDetailActions({
     <>
       <button
         onClick={() => setShowModal(true)}
-        className="w-full bg-primary text-white py-3 rounded-lg font-semibold hover:bg-primary/90 active:scale-[0.99] transition-colors"
+        className="w-full bg-primary text-primary-foreground py-3 rounded-lg font-semibold hover:bg-primary/90 active:scale-[0.99] transition-colors"
       >
         להירשם
       </button>
@@ -284,13 +284,13 @@ export function ActivityDetailActions({
             {!registered ? (
               <div className="space-y-4">
                 <div className="bg-primary/10 rounded-2xl p-4 space-y-2">
-                  <p className="font-semibold text-sm">📍 מקום</p>
+                  <p className="font-semibold text-sm">מקום</p>
                   <p className="text-sm">{event.location}</p>
                 </div>
 
                 {event.price !== "כניסה חופשית" && (
                   <div className="bg-surface-2 rounded-2xl p-4 space-y-2">
-                    <p className="font-semibold text-sm">💳 סוג התשלום</p>
+                    <p className="font-semibold text-sm">סוג התשלום</p>
                     <p className="text-sm text-muted-foreground">
                       {event.kind === "חוג"
                         ? "הוראת קבע חודשית"
@@ -300,7 +300,7 @@ export function ActivityDetailActions({
                 )}
 
                 <div className="space-y-3 bg-surface-2 rounded-2xl p-4">
-                  <label className="block text-sm font-semibold">👥 משתתפים</label>
+                  <label className="block text-sm font-semibold">משתתפים</label>
                   <div className="space-y-2">
                     <label className="flex items-center gap-2 text-sm">
                       <input
@@ -319,7 +319,7 @@ export function ActivityDetailActions({
                           onChange={(e) => toggleDependent(dep.id, e.target.checked)}
                           className="w-4 h-4 accent-primary"
                         />
-                        👧 {dep.full_name}
+                        {dep.full_name}
                       </label>
                     ))}
                   </div>
@@ -333,11 +333,11 @@ export function ActivityDetailActions({
                             value={name}
                             onChange={(e) => handleOtherNameChange(index, e.target.value)}
                             placeholder="שם המשתתף (בן/בת זוג, אורח/ת...)"
-                            className="flex-1 px-3 py-2 rounded-lg border border-[var(--color-border)] bg-background text-sm"
+                            className="flex-1 px-3 py-2 rounded-lg border border-[var(--color-border)] bg-surface text-sm"
                           />
                           <button
                             onClick={() => handleRemoveOther(index)}
-                            className="p-2 hover:bg-red-100 dark:hover:bg-red-900/30 rounded-lg transition-colors"
+                            className="p-2 hover:bg-urgent/10 rounded-lg transition-colors"
                           >
                             <X className="w-4 h-4" />
                           </button>
@@ -358,7 +358,7 @@ export function ActivityDetailActions({
 
                 {event.price !== "כניסה חופשית" && (
                   <div className="bg-surface-2 rounded-2xl p-4 space-y-2">
-                    <p className="font-semibold text-sm">💰 סכום לתשלום</p>
+                    <p className="font-semibold text-sm">סכום לתשלום</p>
                     <div className="space-y-1">
                       <p className="text-sm text-muted-foreground">
                         {event.priceAmount} ₪ × {totalParticipantCount} משתתפ{totalParticipantCount === 1 ? "" : "ים"}
@@ -373,7 +373,7 @@ export function ActivityDetailActions({
                 <button
                   onClick={handleRegister}
                   disabled={loading || totalParticipantCount === 0}
-                  className="w-full bg-primary text-white py-3 rounded-lg font-semibold hover:bg-primary/90 active:scale-[0.99] transition-colors disabled:bg-primary/50 disabled:cursor-not-allowed"
+                  className="w-full bg-primary text-primary-foreground py-3 rounded-lg font-semibold hover:bg-primary/90 active:scale-[0.99] transition-colors disabled:bg-primary/50 disabled:cursor-not-allowed"
                 >
                   {loading ? "שומרת..." : event.price === "כניסה חופשית" ? "להירשם" : "המשך לתשלום"}
                 </button>
@@ -406,9 +406,9 @@ export function ActivityDetailActions({
               <p className="text-2xl font-bold text-primary">{getTotalPrice()} ₪</p>
             </div>
 
-            <div className="space-y-2 bg-blue-50 dark:bg-blue-900/20 rounded-2xl p-4">
-              <p className="text-sm font-semibold text-blue-900 dark:text-blue-100">📌 זהו מצב הדגמה</p>
-              <p className="text-sm text-blue-800 dark:text-blue-200">התשלום לא נגבה בפועל בשלב זה - ההרשמה מאושרת מיידית.</p>
+            <div className="space-y-2 bg-primary/8 rounded-2xl p-4">
+              <p className="text-sm font-semibold text-foreground">זהו מצב הדגמה</p>
+              <p className="text-sm text-foreground/90">התשלום לא נגבה בפועל בשלב זה - ההרשמה מאושרת מיידית.</p>
             </div>
 
             <div className="space-y-2 bg-surface-2 rounded-2xl p-4">
@@ -423,7 +423,7 @@ export function ActivityDetailActions({
             <button
               onClick={handlePaymentComplete}
               disabled={loading}
-              className="w-full bg-primary text-white py-3 rounded-lg font-semibold hover:bg-primary/90 active:scale-[0.99] transition-colors disabled:bg-primary/50"
+              className="w-full bg-primary text-primary-foreground py-3 rounded-lg font-semibold hover:bg-primary/90 active:scale-[0.99] transition-colors disabled:bg-primary/50"
             >
               {loading ? "מעבדת..." : "אשרי רישום"}
             </button>

@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { Hero } from "@/components/feed/Hero";
 import { QuickActions } from "@/components/feed/QuickActions";
+import { WeekRota } from "@/components/feed/WeekRota";
 import { AnnouncementList } from "@/components/feed/AnnouncementList";
 import { GallerySection } from "@/components/community/GallerySection";
 import { Card } from "@/components/ui/Card";
@@ -14,7 +15,6 @@ import { DEMO_CLUBS } from "@/lib/demo-data";
 import { applyOverride, getDeletedActivityIds } from "@/lib/activity-overrides";
 import { getIcon } from "@/lib/icons";
 import { AlertCircle, Clock, MapPin } from "lucide-react";
-import { Trash2 } from "lucide-react";
 
 export default function HomePage() {
   const { announcements, isLoading } = useAnnouncements();
@@ -81,99 +81,98 @@ export default function HomePage() {
 
   return (
     <div>
-      <Hero />
-      <div className="max-w-2xl mx-auto px-4 py-5 space-y-6">
-        {firstName && (
-          <p className="font-sans text-xl font-bold">שלום {firstName}</p>
-        )}
+      <div className="mx-auto max-w-5xl space-y-5 px-4 py-5">
+        <div className="rise" style={{ ["--i" as string]: 0 }}>
+          <Hero />
+        </div>
+        {firstName && <p className="text-xl font-extrabold">שלום {firstName}</p>}
 
         {/* Status Banner */}
         {userStatus === 'pending' && !statusLoading && (
-          <div className="flex items-start gap-3 rounded-2xl bg-amber-50 dark:bg-amber-950/30 px-4 py-3 border border-amber-200 dark:border-amber-800">
-            <Clock className="w-5 h-5 text-amber-600 dark:text-amber-400 shrink-0 mt-0.5" />
+          <div className="flex items-start gap-3 rounded-2xl border border-accent/40 bg-[color-mix(in_srgb,var(--color-accent)_10%,var(--color-surface))] px-4 py-3">
+            <Clock className="w-5 h-5 text-accent shrink-0 mt-0.5" aria-hidden />
             <div>
-              <p className="font-semibold text-amber-900 dark:text-amber-100">⏳ הרישום ממתין לאישור</p>
-              <p className="text-sm text-amber-800 dark:text-amber-200">הוועד שלנו בודק את הבקשה שלך. תקבל הודעה כשהוא יאשר אותך.</p>
+              <p className="font-bold">הרישום ממתין לאישור</p>
+              <p className="text-sm text-foreground/80">הוועד בודק את הבקשה שלך. ברגע שיאשר, תקבלי גישה מלאה.</p>
             </div>
           </div>
         )}
 
         {userStatus === 'rejected' && !statusLoading && (
-          <div className="flex items-start gap-3 rounded-2xl bg-red-50 dark:bg-red-950/30 px-4 py-3 border border-red-200 dark:border-red-800">
-            <AlertCircle className="w-5 h-5 text-red-600 dark:text-red-400 shrink-0 mt-0.5" />
+          <div className="flex items-start gap-3 rounded-2xl border border-urgent/50 bg-[color-mix(in_srgb,var(--color-urgent)_8%,var(--color-surface))] px-4 py-3">
+            <AlertCircle className="w-5 h-5 text-urgent shrink-0 mt-0.5" aria-hidden />
             <div>
-              <p className="font-semibold text-red-900 dark:text-red-100">❌ הבקשה נדחתה</p>
-              <p className="text-sm text-red-800 dark:text-red-200">יוצא כי הוועד דחה את בקשת הרישום שלך. <a href="/more" className="underline hover:no-underline">צור קשר</a> כדי לדעת יותר.</p>
+              <p className="font-bold">הבקשה נדחתה</p>
+              <p className="text-sm text-foreground/80">
+                הוועד לא אישר את בקשת הרישום. <Link href="/more/requests" className="font-semibold underline">כתבו לוועד</Link> כדי להבין למה.
+              </p>
             </div>
           </div>
         )}
 
-        <QuickActions />
+        <div className="grid gap-5 lg:grid-cols-12">
+          <div className="space-y-5 lg:col-span-7">
+            <div className="rise" style={{ ["--i" as string]: 1 }}>
+              <WeekRota />
+            </div>
 
-        <div className="space-y-2">
-          <div className="contrast-surface flex items-center gap-3 rounded-2xl bg-surface-2 px-4 py-3 text-sm">
-            <Trash2 className="w-5 h-5 text-primary shrink-0" aria-hidden />
-            <span>
-              פינוי אשפה: <span className="font-semibold">ימי ראשון, שלישי וחמישי</span>
-            </span>
+            <section aria-labelledby="board-heading" className="rise" style={{ ["--i" as string]: 3 }}>
+              <h2 id="board-heading" className="mb-2.5 text-lg font-extrabold">לוח הודעות הוועד</h2>
+              {isLoading ? (
+                <div className="py-8 text-center text-muted-foreground">טוען הודעות...</div>
+              ) : announcements.length === 0 ? (
+                <div className="py-8 text-center text-muted-foreground">אין הודעות כרגע.</div>
+              ) : (
+                <AnnouncementList announcements={announcements} />
+              )}
+            </section>
           </div>
-          <div className="contrast-surface flex items-center gap-3 rounded-2xl bg-surface-2 px-4 py-3 text-sm">
-            <Trash2 className="w-5 h-5 text-secondary shrink-0" aria-hidden />
-            <span>
-              פינוי גזם: <span className="font-semibold">שני וחמישי</span>
-            </span>
-          </div>
+
+          <aside className="space-y-5 lg:col-span-5">
+            <div className="rise" style={{ ["--i" as string]: 2 }}>
+              <QuickActions />
+            </div>
+
+            <section aria-labelledby="next-heading" className="rise space-y-2.5" style={{ ["--i" as string]: 4 }}>
+              <div className="flex items-baseline justify-between">
+                <h2 id="next-heading" className="text-lg font-extrabold">הפעילות הבאה</h2>
+                <Link href="/activities" className="text-sm font-semibold text-primary hover:underline">
+                  כל הפעילויות
+                </Link>
+              </div>
+              {nearestActivity ? (
+                <Link href={`/activities/${nearestActivity.id}`} className="press block">
+                  <Card className="flex items-center gap-3 p-4 transition-colors hover:bg-surface-2">
+                    <div className="grid h-12 w-12 shrink-0 place-items-center rounded-xl bg-[color-mix(in_srgb,var(--rota-violet)_16%,transparent)] text-[var(--rota-violet)]">
+                      {(() => {
+                        const Icon = getIcon(nearestActivity.iconKey);
+                        return <Icon className="h-6 w-6" aria-hidden />;
+                      })()}
+                    </div>
+                    <div className="min-w-0 flex-1">
+                      <p className="font-bold leading-snug">{nearestActivity.title}</p>
+                      <div className="mt-1 flex items-center gap-1.5 text-xs text-muted-foreground">
+                        <Clock className="h-3.5 w-3.5 shrink-0" aria-hidden />
+                        {new Date(nearestActivity.eventDate!).toLocaleDateString("he-IL", {
+                          weekday: "long",
+                          month: "short",
+                          day: "numeric",
+                        })}{" "}
+                        · <bdi dir="ltr">{nearestActivity.time}</bdi>
+                      </div>
+                      <div className="mt-0.5 flex items-center gap-1.5 text-xs text-muted-foreground">
+                        <MapPin className="h-3.5 w-3.5 shrink-0" aria-hidden />
+                        {nearestActivity.location}
+                      </div>
+                    </div>
+                  </Card>
+                </Link>
+              ) : (
+                <p className="py-4 text-sm text-muted-foreground">אין פעילויות קרובות כרגע.</p>
+              )}
+            </section>
+          </aside>
         </div>
-
-        <section>
-          <h2 className="font-sans text-lg font-bold mb-3">לוח הודעות הועד</h2>
-          {isLoading ? (
-            <div className="text-center text-muted-foreground py-8">טוען הודעות...</div>
-          ) : announcements.length === 0 ? (
-            <div className="text-center text-muted-foreground py-8">אין הודעות עדיין</div>
-          ) : (
-            <AnnouncementList announcements={announcements} />
-          )}
-        </section>
-
-        <section className="space-y-3">
-          <div className="flex items-center justify-between">
-            <h2 className="font-sans text-lg font-bold">הפעילות הקרובה</h2>
-            <Link href="/activities" className="text-sm font-semibold text-primary hover:underline">
-              לכל הפעילויות
-            </Link>
-          </div>
-          {nearestActivity ? (
-            <Link href={`/activities/${nearestActivity.id}`} className="block">
-              <Card className="p-4 flex items-center gap-3 active:scale-[0.99] transition-transform">
-                <div className="rounded-xl bg-surface-2 p-2.5 shrink-0">
-                  {(() => {
-                    const Icon = getIcon(nearestActivity.iconKey);
-                    return <Icon className="w-6 h-6 text-primary" aria-hidden />;
-                  })()}
-                </div>
-                <div className="min-w-0 flex-1">
-                  <p className="font-semibold">{nearestActivity.title}</p>
-                  <div className="flex items-center gap-1 text-xs text-muted-foreground mt-1">
-                    <Clock className="w-3.5 h-3.5 shrink-0" aria-hidden />
-                    {new Date(nearestActivity.eventDate!).toLocaleDateString("he-IL", {
-                      weekday: "short",
-                      month: "short",
-                      day: "numeric",
-                    })}{" "}
-                    · {nearestActivity.time}
-                  </div>
-                  <div className="flex items-center gap-1 text-xs text-muted-foreground mt-0.5">
-                    <MapPin className="w-3.5 h-3.5 shrink-0" aria-hidden />
-                    {nearestActivity.location}
-                  </div>
-                </div>
-              </Card>
-            </Link>
-          ) : (
-            <p className="text-sm text-muted-foreground py-4 text-center">אין פעילויות קרובות כרגע</p>
-          )}
-        </section>
 
         <GallerySection />
       </div>

@@ -110,7 +110,7 @@ export default function SettingsPage() {
       setTimeout(() => setSaveMessage(''), 3000);
     } catch (err) {
       console.error('Error saving profile:', err);
-      setSaveMessage('❌ שגיאה בשמירה');
+      setSaveMessage('שגיאה בשמירה');
     } finally {
       setIsSaving(false);
     }
@@ -119,11 +119,11 @@ export default function SettingsPage() {
   const addDependent = async () => {
     if (!user) return;
     if (!newDependentName || !newDependentBirthDate) {
-      setSaveMessage('❌ נא למלא את שם הילד ותאריך הלידה');
+      setSaveMessage('נא למלא את שם הילד ותאריך הלידה');
       return;
     }
     if (calculateAge(newDependentBirthDate) >= 18) {
-      setSaveMessage('❌ ניתן להוסיף רק ילדים מתחת לגיל 18');
+      setSaveMessage('ניתן להוסיף רק ילדים מתחת לגיל 18');
       return;
     }
     try {
@@ -139,7 +139,7 @@ export default function SettingsPage() {
       setNewDependentBirthDate('');
     } catch (err) {
       console.error('Error adding dependent:', err);
-      setSaveMessage('❌ שגיאה בהוספת הילד');
+      setSaveMessage('שגיאה בהוספת הילד');
     }
   };
 
@@ -150,7 +150,7 @@ export default function SettingsPage() {
       setDependents(dependents.filter((d) => d.id !== id));
     } catch (err) {
       console.error('Error removing dependent:', err);
-      setSaveMessage('❌ שגיאה במחיקת הילד');
+      setSaveMessage('שגיאה במחיקת הילד');
     }
   };
 
@@ -175,7 +175,7 @@ export default function SettingsPage() {
       <h1 className="font-sans text-2xl font-bold mb-6">הגדרות אישיות</h1>
 
       {saveMessage && (
-        <div className={`mb-4 p-3 rounded-lg text-sm ${saveMessage.includes('✓') ? 'bg-green-500/20 text-green-700' : 'bg-red-500/20 text-red-700'}`}>
+        <div className={`mb-4 p-3 rounded-lg text-sm ${saveMessage.includes('✓') ? 'bg-secondary/10 text-secondary' : 'bg-urgent/10 text-urgent'}`}>
           {saveMessage}
         </div>
       )}
@@ -287,7 +287,7 @@ export default function SettingsPage() {
       <button
         onClick={saveProfile}
         disabled={isSaving}
-        className="w-full bg-primary text-white py-3 rounded-lg font-semibold hover:bg-primary/90 disabled:opacity-50 transition-colors"
+        className="w-full bg-primary text-primary-foreground py-3 rounded-lg font-semibold hover:bg-primary/90 disabled:opacity-50 transition-colors"
       >
         {isSaving ? 'שמירה...' : 'שמור שינויים'}
       </button>

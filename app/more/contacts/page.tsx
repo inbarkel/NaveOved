@@ -102,11 +102,11 @@ export default function ContactsPage() {
 
   const handleSave = async () => {
     if (!form.category.trim() || !form.name.trim() || !form.phone.trim()) {
-      setMessage("❌ נא למלא את כל השדות");
+      setMessage("נא למלא את כל השדות");
       return;
     }
     if (!supabase) {
-      setMessage("❌ צריך חיבור לשרת כדי לשמור");
+      setMessage("צריך חיבור לשרת כדי לשמור");
       return;
     }
     try {
@@ -131,7 +131,7 @@ export default function ContactsPage() {
       await loadContacts();
     } catch (err) {
       console.error("Error saving contact:", err);
-      setMessage("❌ שגיאה בשמירה");
+      setMessage("שגיאה בשמירה");
     }
   };
 
@@ -141,7 +141,7 @@ export default function ContactsPage() {
     const { error } = await supabase.from("contacts").delete().eq("id", id);
     if (error) {
       console.error("Error deleting contact:", error);
-      setMessage("❌ שגיאה במחיקה");
+      setMessage("שגיאה במחיקה");
       return;
     }
     await loadContacts();
@@ -156,7 +156,7 @@ export default function ContactsPage() {
       <h1 className="font-sans text-2xl font-bold">מספרי טלפון חשובים</h1>
 
       {message && (
-        <div className="p-3 rounded-lg text-sm bg-red-500/20 text-red-700">{message}</div>
+        <div className="p-3 rounded-lg text-sm bg-urgent/10 text-urgent">{message}</div>
       )}
 
       {isAdmin && (
@@ -196,10 +196,10 @@ export default function ContactsPage() {
                         </button>
                         <button
                           onClick={() => handleDelete(contact.id)}
-                          className="p-2 hover:bg-red-100 dark:hover:bg-red-900/30 rounded-lg transition-colors"
+                          className="p-2 hover:bg-urgent/10 rounded-lg transition-colors"
                           aria-label="מחיקה"
                         >
-                          <Trash2 className="w-4 h-4 text-red-700 dark:text-red-300" />
+                          <Trash2 className="w-4 h-4 text-urgent" />
                         </button>
                       </div>
                     ) : (
@@ -237,7 +237,7 @@ export default function ContactsPage() {
                         setForm({ ...form, category: e.target.value });
                       }
                     }}
-                    className="w-full px-3 py-2 rounded-lg border border-[var(--color-border)] bg-background text-sm"
+                    className="w-full px-3 py-2 rounded-lg border border-[var(--color-border)] bg-surface text-sm"
                   >
                     <option value="" disabled>
                       בחר קטגוריה
@@ -256,7 +256,7 @@ export default function ContactsPage() {
                       value={form.category}
                       onChange={(e) => setForm({ ...form, category: e.target.value })}
                       placeholder="שם הקטגוריה החדשה"
-                      className="flex-1 px-3 py-2 rounded-lg border border-[var(--color-border)] bg-background text-sm"
+                      className="flex-1 px-3 py-2 rounded-lg border border-[var(--color-border)] bg-surface text-sm"
                     />
                     {categories.length > 0 && (
                       <button
@@ -279,7 +279,7 @@ export default function ContactsPage() {
                   type="text"
                   value={form.name}
                   onChange={(e) => setForm({ ...form, name: e.target.value })}
-                  className="w-full px-3 py-2 rounded-lg border border-[var(--color-border)] bg-background text-sm"
+                  className="w-full px-3 py-2 rounded-lg border border-[var(--color-border)] bg-surface text-sm"
                 />
               </div>
               <div>
@@ -289,13 +289,13 @@ export default function ContactsPage() {
                   value={form.phone}
                   onChange={(e) => setForm({ ...form, phone: e.target.value })}
                   dir="ltr"
-                  className="w-full px-3 py-2 rounded-lg border border-[var(--color-border)] bg-background text-sm"
+                  className="w-full px-3 py-2 rounded-lg border border-[var(--color-border)] bg-surface text-sm"
                 />
               </div>
             </div>
             <button
               onClick={handleSave}
-              className="w-full bg-primary text-white py-3 rounded-lg font-semibold hover:bg-primary/90 transition-colors"
+              className="w-full bg-primary text-primary-foreground py-3 rounded-lg font-semibold hover:bg-primary/90 transition-colors"
             >
               שמירה
             </button>

@@ -30,7 +30,7 @@ export function BottomNav() {
   const pathname = usePathname();
   return (
     <nav
-      className="md:hidden fixed bottom-0 inset-x-0 z-40 bg-surface/95 backdrop-blur border-t border-[var(--color-border)] pb-[env(safe-area-inset-bottom)]"
+      className="md:hidden fixed bottom-0 inset-x-0 z-40 bg-surface border-t border-[var(--color-border)] pb-[env(safe-area-inset-bottom)]"
       aria-label="ניווט ראשי"
     >
       <ul className="grid grid-cols-6">
@@ -41,15 +41,15 @@ export function BottomNav() {
             <li key={item.href} className="relative">
               <Link
                 href={item.href}
-                className={`flex flex-col items-center gap-1 py-2.5 text-[11px] font-medium transition-colors ${
-                  active ? "text-primary" : "text-muted-foreground"
+                className={`flex flex-col items-center gap-1 py-2.5 text-[11px] font-semibold transition-colors ${
+                  active ? "text-primary font-bold" : "text-muted-foreground"
                 }`}
                 aria-current={active ? "page" : undefined}
               >
                 {active && (
                   <motion.span
                     layoutId="bottom-nav-active"
-                    className="absolute top-0 inset-x-3 h-0.5 rounded-full bg-primary"
+                    className="absolute top-0 inset-x-2 h-[3px] bg-primary"
                     transition={{ type: "spring", stiffness: 400, damping: 30 }}
                   />
                 )}
@@ -68,7 +68,7 @@ export function SideRail() {
   const pathname = usePathname();
   return (
     <nav
-      className="hidden md:flex flex-col w-20 shrink-0 border-e border-[var(--color-border)] bg-surface py-6 items-center gap-2 sticky top-0 h-screen overflow-y-auto"
+      className="hidden md:flex flex-col w-24 shrink-0 border-e border-[var(--color-border)] bg-surface py-6 items-center gap-2 sticky top-0 h-screen overflow-y-auto"
       aria-label="ניווט ראשי"
     >
       {NAV_ITEMS.map((item) => {
@@ -78,8 +78,8 @@ export function SideRail() {
           <Link
             key={item.href}
             href={item.href}
-            className={`relative flex flex-col items-center gap-1 w-16 py-3 rounded-2xl text-[11px] font-medium transition-colors ${
-              active ? "text-primary bg-surface-2" : "text-muted-foreground hover:bg-surface-2"
+            className={`relative flex flex-col items-center gap-1.5 w-[4.75rem] py-3 rounded-xl text-xs font-semibold transition-colors ${
+              active ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:bg-surface-2"
             }`}
             aria-current={active ? "page" : undefined}
           >

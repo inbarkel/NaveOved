@@ -231,7 +231,7 @@ export default function OnboardingPage() {
       <div className="max-w-2xl mx-auto">
         {/* Header */}
         <div className="text-center space-y-2 mb-8">
-          <h1 className="font-sans text-3xl font-bold text-primary">ברוכים הבאים! 👋</h1>
+          <h1 className="font-sans text-3xl font-bold text-primary">ברוכים הבאים! </h1>
           <p className="text-muted-foreground">
             בואו נהכיר אתכם לקהילה שלנו
           </p>
@@ -240,7 +240,7 @@ export default function OnboardingPage() {
         <form onSubmit={handleSubmit} className="space-y-6">
           {/* Error */}
           {error && (
-            <div className="bg-urgent/20 border border-urgent text-urgent rounded-lg p-3 text-sm">
+            <div className="bg-urgent/10 border border-urgent text-urgent rounded-lg p-3 text-sm">
               {error}
             </div>
           )}
@@ -259,7 +259,7 @@ export default function OnboardingPage() {
                 onChange={(e) => setFullName(e.target.value)}
                 placeholder="יוסי כהן"
                 disabled={isLoading}
-                className="w-full px-4 py-2 rounded-lg border border-[var(--color-border)] bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 disabled:opacity-50"
+                className="w-full px-4 py-2 rounded-lg border border-[var(--color-border)] bg-surface text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 disabled:opacity-50"
               />
             </div>
 
@@ -274,7 +274,7 @@ export default function OnboardingPage() {
                   onChange={(e) => setBirthDate(e.target.value)}
                   disabled={isLoading}
                   lang="he"
-                  className="w-full px-4 py-2 rounded-lg border border-[var(--color-border)] bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 disabled:opacity-50"
+                  className="w-full px-4 py-2 rounded-lg border border-[var(--color-border)] bg-surface text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 disabled:opacity-50"
                 />
               </div>
               <div>
@@ -285,7 +285,7 @@ export default function OnboardingPage() {
                   value={gender}
                   onChange={(e) => setGender(e.target.value)}
                   disabled={isLoading}
-                  className="w-full px-4 py-2 rounded-lg border border-[var(--color-border)] bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 disabled:opacity-50"
+                  className="w-full px-4 py-2 rounded-lg border border-[var(--color-border)] bg-surface text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 disabled:opacity-50"
                 >
                   <option value="">בחר...</option>
                   <option value="male">זכר</option>
@@ -315,7 +315,7 @@ export default function OnboardingPage() {
                   onChange={(e) => setNewChild({ ...newChild, name: e.target.value })}
                   placeholder="שם הילד"
                   disabled={isLoading}
-                  className="w-full px-4 py-2 rounded-lg border border-[var(--color-border)] bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 disabled:opacity-50"
+                  className="w-full px-4 py-2 rounded-lg border border-[var(--color-border)] bg-surface text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 disabled:opacity-50"
                 />
               </div>
               <div>
@@ -329,7 +329,7 @@ export default function OnboardingPage() {
                   disabled={isLoading}
                   lang="he"
                   max={new Date().toISOString().slice(0, 10)}
-                  className="w-full px-4 py-2 rounded-lg border border-[var(--color-border)] bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 disabled:opacity-50"
+                  className="w-full px-4 py-2 rounded-lg border border-[var(--color-border)] bg-surface text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 disabled:opacity-50"
                 />
               </div>
               <button
@@ -376,13 +376,13 @@ export default function OnboardingPage() {
           <button
             type="submit"
             disabled={isLoading}
-            className="w-full bg-primary text-white py-3 rounded-lg font-semibold hover:bg-primary/90 disabled:opacity-50 transition-colors"
+            className="w-full bg-primary text-primary-foreground py-3 rounded-lg font-semibold hover:bg-primary/90 disabled:opacity-50 transition-colors"
           >
             {isLoading ? 'שומר...' : 'סיים רישום'}
           </button>
 
           <p className="text-xs text-center text-muted-foreground">
-            ❗ חשוב: הרישום שלך ממתין לאישור הוועד. תקבל הודעה כשיאישרו אותך.
+            חשוב: הרישום שלך ממתין לאישור הוועד. תקבל הודעה כשיאישרו אותך.
           </p>
         </form>
       </div>

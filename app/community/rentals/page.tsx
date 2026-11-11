@@ -64,7 +64,7 @@ export default function RentalsPage() {
           return (
             <Card
               key={item.id}
-              className={`p-4 ${item.resolvedAt ? "opacity-60" : ""} ${needsRefresh ? "border-yellow-400 dark:border-yellow-600" : ""}`}
+              className={`p-4 ${item.resolvedAt ? "bg-surface-2" : ""} ${needsRefresh ? "border-accent/60" : ""}`}
             >
               <div className="flex items-start gap-3">
                 <div className="flex-1 min-w-0">
@@ -79,13 +79,13 @@ export default function RentalsPage() {
               </div>
 
               {needsRefresh && (
-                <div className="mt-3 p-2 bg-yellow-50 dark:bg-yellow-900/20 rounded-lg text-xs text-yellow-800 dark:text-yellow-200">
+                <div className="mt-3 p-2 bg-accent/8 rounded-lg text-xs text-foreground/90">
                   עברו 7 ימים מהפוסט - עדיין רלוונטי?
                 </div>
               )}
 
               {item.resolvedAt && (
-                <div className="mt-2 text-xs text-green-700 dark:text-green-300 font-semibold">
+                <div className="mt-2 text-xs text-secondary font-semibold">
                   ✓ סומן כהושכר - אפשר למחוק
                 </div>
               )}
@@ -95,7 +95,7 @@ export default function RentalsPage() {
                   onClick={() => toggleResolved(item.id)}
                   className={`flex items-center gap-1 px-3 py-1.5 rounded-lg text-sm font-semibold transition-colors ${
                     item.resolvedAt
-                      ? "bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300"
+                      ? "bg-secondary/10 text-secondary"
                       : "bg-surface-2 text-muted-foreground hover:bg-surface-3"
                   }`}
                 >
@@ -106,7 +106,7 @@ export default function RentalsPage() {
                 {needsRefresh && (
                   <button
                     onClick={() => renewItem(item.id)}
-                    className="flex items-center gap-1 px-3 py-1.5 rounded-lg text-sm font-semibold bg-primary text-white hover:bg-primary/90 transition-colors"
+                    className="flex items-center gap-1 px-3 py-1.5 rounded-lg text-sm font-semibold bg-primary text-primary-foreground hover:bg-primary/90 transition-colors"
                   >
                     <RotateCcw className="w-4 h-4" />
                     לחדש מודעה
@@ -115,7 +115,7 @@ export default function RentalsPage() {
 
                 <button
                   onClick={() => deleteItem(item.id)}
-                  className="flex items-center gap-1 px-3 py-1.5 rounded-lg text-sm font-semibold bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300 hover:bg-red-200 dark:hover:bg-red-900/50 transition-colors"
+                  className="flex items-center gap-1 px-3 py-1.5 rounded-lg text-sm font-semibold bg-urgent/10 text-urgent hover:bg-urgent/25 transition-colors"
                 >
                   <Trash2 className="w-4 h-4" />
                   מחק

@@ -65,7 +65,7 @@ export default function NewResidentsPage() {
           rel="noopener noreferrer"
           className="w-full rounded-lg bg-primary/20 text-primary py-2 text-sm font-semibold hover:bg-primary/30 transition-colors"
         >
-          📋 בקשת אישור תושב עמק הירדן
+          בקשת אישור תושב עמק הירדן
         </a>
       </Card>
     </div>
