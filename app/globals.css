@@ -262,6 +262,63 @@ a.press:active {
   to   { opacity: 1; transform: translateY(0); }
 }
 
+/* באנר: זום איטי על הנוף ועננים שנוסעים בשמיים (תנועה קבועה, לכן linear) */
+.hero-img {
+  animation: hero-zoom 70s ease-in-out infinite alternate;
+  transform-origin: 50% 70%;
+}
+@keyframes hero-zoom {
+  from { transform: scale(1); }
+  to   { transform: scale(1.06); }
+}
+
+.hero-sky {
+  position: absolute;
+  inset: 0 0 52% 0;
+  overflow: hidden;
+  pointer-events: none;
+  -webkit-mask-image: linear-gradient(to bottom, #000 60%, transparent);
+  mask-image: linear-gradient(to bottom, #000 60%, transparent);
+}
+.hero-sky::before,
+.hero-sky::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 200%;
+  height: 100%;
+  background-repeat: repeat-x;
+  background-size: 50% 100%;
+  filter: blur(3px);
+  will-change: transform;
+}
+.hero-sky::before {
+  background-image:
+    radial-gradient(ellipse 22% 38% at 12% 38%, rgba(255, 255, 255, 0.88), transparent 72%),
+    radial-gradient(ellipse 26% 30% at 40% 22%, rgba(255, 255, 255, 0.78), transparent 72%),
+    radial-gradient(ellipse 20% 34% at 70% 46%, rgba(255, 255, 255, 0.82), transparent 72%);
+  animation: sky-drift 150s linear infinite;
+}
+.hero-sky::after {
+  top: 14%;
+  opacity: 0.7;
+  background-image:
+    radial-gradient(ellipse 16% 26% at 24% 30%, rgba(255, 255, 255, 0.78), transparent 72%),
+    radial-gradient(ellipse 18% 24% at 58% 52%, rgba(255, 255, 255, 0.72), transparent 72%),
+    radial-gradient(ellipse 14% 22% at 88% 28%, rgba(255, 255, 255, 0.78), transparent 72%);
+  animation: sky-drift 95s linear infinite;
+}
+@keyframes sky-drift {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .hero-img,
+  .hero-sky::before,
+  .hero-sky::after { animation: none; }
+}
+
 /* תא בתוך רשת התורנות */
 .rota-cell {
   border: 1px solid var(--color-border);

@@ -2,7 +2,8 @@ import Image from "next/image";
 
 /**
  * הבאנר כולל כבר את הכותרת והלוגו בתוך התמונה עצמה, לכן אין כאן שכבת טקסט נוספת.
- * התמונה (3:1) מוצגת כמסגרת בתוך רשת העמוד, באותה פינה ובאותו קו כמו שאר הבלוקים.
+ * התנועה: זום איטי מאוד על הנוף, ועננים שנוסעים בשמיים. הכול ב-CSS, רק transform,
+ * ונעצר כשהמשתמש ביקש פחות תנועה.
  */
 export function Hero() {
   return (
@@ -13,8 +14,9 @@ export function Hero() {
         fill
         priority
         sizes="(min-width: 1024px) 1024px, 100vw"
-        className="object-cover"
+        className="hero-img object-cover"
       />
+      <div className="hero-sky" aria-hidden />
     </div>
   );
 }
