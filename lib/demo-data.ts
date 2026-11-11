@@ -43,7 +43,7 @@ export const DEMO_ANNOUNCEMENTS: Announcement[] = [
   },
   {
     id: "a5",
-    title: "📅 רישום לחוגים סתיו 2026",
+    title: "📅 רישום לחוגים לשנה הבאה",
     body: "רישום קדם לחוגים לסתיו פתוח כבר! בחרו את החוגים שלכם וקבלו הנחה מוקדמת של 10%.",
     urgent: false,
     createdAt: "2026-07-28T10:00:00",
@@ -290,7 +290,7 @@ export const DEMO_TOWN_BOARD: TownBoardItem[] = [
     id: "t2",
     category: "job",
     title: "מכרז לאספקת שירותי גינון לשטחים הציבוריים",
-    body: "המכרז פתוח להגשות עד 31 באוגוסט 2026. מסמכי המכרז זמינים במזכירות.",
+    body: "המכרז פתוח להגשות עד סוף החודש הקרוב. מסמכי המכרז זמינים במזכירות.",
     contactPhone: "050-9998877",
   },
 ];
@@ -433,3 +433,35 @@ export const SERVICE_CONTACTS: ServiceContact[] = [
   { id: "s12", name: "אבישג - יו״ר הועד", phone: "054-6388485", category: "leadership" },
   { id: "s13", name: "עליזה - מנהלת הקהילה", phone: "050-7799947", category: "leadership" },
 ];
+
+/*
+  תאריכי ההדגמה נכתבו סביב 3 באוגוסט 2026. כדי שהאתר לא ייראה "ישן" (הודעות מלפני 100 יום,
+  פעילויות שכבר עברו), כל התאריכים מוזזים קדימה במספר הימים שעברו מאז.
+*/
+const DEMO_BASE_TIME = new Date("2026-08-03T00:00:00").getTime();
+const DEMO_SHIFT_DAYS = Math.max(0, Math.floor((Date.now() - DEMO_BASE_TIME) / 86_400_000));
+
+function shiftIso(value: string): string {
+  const d = new Date(value);
+  if (Number.isNaN(d.getTime())) return value;
+  d.setDate(d.getDate() + DEMO_SHIFT_DAYS);
+  const pad = (n: number) => String(n).padStart(2, "0");
+  const date = `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+  if (!value.includes("T")) return date;
+  return `${date}T${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
+}
+
+function rebaseDates(items: object[], keys: string[]) {
+  for (const item of items as Record<string, unknown>[]) {
+    for (const key of keys) {
+      const v = item[key];
+      if (typeof v === "string") item[key] = shiftIso(v);
+    }
+  }
+}
+
+rebaseDates(DEMO_ANNOUNCEMENTS, ["createdAt"]);
+rebaseDates(DEMO_CLUBS, ["eventDate", "registrationDeadline", "rescheduledTo"]); // startDate/endDate של חוגים נשארים: הם משקפים שנת לימודים
+for (const list of [DEMO_TOWN_BOARD, DEMO_RENTALS, DEMO_SECONDHAND, DEMO_LOSTFOUND, DEMO_IDEAS, DEMO_BUSINESSES]) {
+  rebaseDates(list, ["createdAt", "resolvedAt"]);
+}
