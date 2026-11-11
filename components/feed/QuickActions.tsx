@@ -11,7 +11,7 @@ const TONES: Record<string, string> = {
 
 export function QuickActions() {
   return (
-    <div className="grid grid-cols-2 gap-2.5">
+    <div className="grid grid-cols-2 gap-2.5 md:grid-cols-4">
       {QUICK_ACTIONS.map((action) => {
         const Icon = getIcon(action.iconKey);
         const tone = TONES[action.label] ?? "var(--rota-water)";

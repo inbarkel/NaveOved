@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { ChevronRight, Phone, Plus, Trash2, Pencil, X } from "lucide-react";
+import { ChevronDown, ChevronRight, Phone, Plus, Trash2, Pencil, X } from "lucide-react";
 import { Card } from "@/components/ui/Card";
 import { supabase } from "@/lib/supabase-client";
 import { useIsCommittee } from "@/lib/use-committee-role";
@@ -51,6 +51,15 @@ export default function ContactsPage() {
   const [contacts, setContacts] = useState<Contact[]>(DEFAULT_CONTACTS);
   const [isLoading, setIsLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
+  // On phones the categories are collapsible so the page stays short. "המושב" starts open.
+  const [openCats, setOpenCats] = useState<Set<string>>(new Set(["המושב"]));
+  const toggleCategory = (category: string) =>
+    setOpenCats((prev) => {
+      const next = new Set(prev);
+      if (next.has(category)) next.delete(category);
+      else next.add(category);
+      return next;
+    });
   const [editingId, setEditingId] = useState<string | null>(null);
   const [form, setForm] = useState(EMPTY_FORM);
   const [isNewCategory, setIsNewCategory] = useState(false);
@@ -148,7 +157,7 @@ export default function ContactsPage() {
   };
 
   return (
-    <div className="max-w-2xl mx-auto px-4 py-5 space-y-5">
+    <div className="mx-auto max-w-3xl space-y-5 px-4 py-5">
       <Link href="/" className="inline-flex items-center gap-1 text-sm text-muted-foreground">
         <ChevronRight className="w-4 h-4" aria-hidden />
         חזרה
@@ -170,13 +179,28 @@ export default function ContactsPage() {
       )}
 
       {!isLoading && (
-        <div className="space-y-6">
+        <div className="space-y-4 md:space-y-6">
           {categories.map((category) => {
             const numbers = grouped[category];
             return (
             <div key={category}>
-              <h2 className="font-sans font-bold text-sm text-muted-foreground mb-2 px-1">{category}</h2>
-              <div className="space-y-2">
+              <h2 className="mb-2 px-1">
+                <button
+                  type="button"
+                  onClick={() => toggleCategory(category)}
+                  aria-expanded={openCats.has(category)}
+                  className="flex w-full items-center justify-between rounded-lg py-1 text-start font-sans text-sm font-bold text-muted-foreground md:pointer-events-none"
+                >
+                  <span>
+                    {category} <span className="font-medium">({numbers.length})</span>
+                  </span>
+                  <ChevronDown
+                    className={`h-4 w-4 transition-transform md:hidden ${openCats.has(category) ? "rotate-180" : ""}`}
+                    aria-hidden
+                  />
+                </button>
+              </h2>
+              <div className={`grid gap-2 md:grid-cols-2 ${openCats.has(category) ? "" : "hidden md:grid"}`}>
                 {numbers.map((contact) => (
                   <Card key={contact.id} className="p-3 flex items-center justify-between hover:bg-surface-2">
                     <a href={`tel:${contact.phone}`} className="flex items-center gap-2 min-w-0 flex-1">

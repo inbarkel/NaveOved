@@ -87,6 +87,10 @@ export default function HomePage() {
         </div>
         {firstName && <p className="text-xl font-extrabold">שלום {firstName}</p>}
 
+        <div className="rise" style={{ ["--i" as string]: 1 }}>
+          <QuickActions />
+        </div>
+
         {/* Status Banner */}
         {userStatus === 'pending' && !statusLoading && (
           <div className="flex items-start gap-3 rounded-2xl border border-accent/40 bg-[color-mix(in_srgb,var(--color-accent)_10%,var(--color-surface))] px-4 py-3">
@@ -112,7 +116,7 @@ export default function HomePage() {
 
         <div className="grid gap-5 lg:grid-cols-12">
           <div className="space-y-5 lg:col-span-7">
-            <div className="rise" style={{ ["--i" as string]: 1 }}>
+            <div className="rise" style={{ ["--i" as string]: 2 }}>
               <WeekRota />
             </div>
 
@@ -129,10 +133,6 @@ export default function HomePage() {
           </div>
 
           <aside className="space-y-5 lg:col-span-5">
-            <div className="rise" style={{ ["--i" as string]: 2 }}>
-              <QuickActions />
-            </div>
-
             <section aria-labelledby="next-heading" className="rise space-y-2.5" style={{ ["--i" as string]: 4 }}>
               <div className="flex items-baseline justify-between">
                 <h2 id="next-heading" className="text-lg font-extrabold">הפעילות הבאה</h2>
